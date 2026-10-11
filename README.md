@@ -1,2 +1,2 @@
 # 10krijgen-
-Je
+Je gaat een 10 krijgen!
