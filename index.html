@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Krijgen - 2 VWO Studieportaal</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --accent-indigo: #6366f1;
+            --accent-indigo-hover: #4f46e5;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 40px; }
+
+        /* HEADER */
+        header { background-color: rgba(30, 41, 59, 0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 50; padding: 12px 20px; }
+        .header-container { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .logo-group { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+        .logo-text h1 { font-size: 1.3rem; font-weight: 900; background: linear-gradient(to right, #818cf8, #c084fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-text p { font-size: 0.75rem; color: var(--text-muted); }
+
+        .header-stats { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .pill { background-color: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); padding: 5px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .action-btn { background-color: var(--bg-card-hover); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .action-btn:hover { background-color: #475569; }
+
+        /* CONTAINER & NAV */
+        .main-container { max-width: 900px; width: 100%; margin: 20px auto 0; padding: 0 16px; flex-grow: 1; }
+        nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; background-color: var(--bg-card); padding: 6px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 24px; overflow-x: auto; }
+        .nav-btn { background: none; border: none; color: var(--text-muted); padding: 10px 4px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+        .nav-btn.active { background-color: var(--accent-indigo); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+
+        /* WELKOM & VAKKEN */
+        .welcome-card { background: linear-gradient(135deg, #1e293b, #1e1b4b); border: 1px solid var(--border-color); border-radius: 24px; padding: 24px; margin-bottom: 20px; }
+        .welcome-badge { font-size: 0.7rem; font-weight: 900; letter-spacing: 1px; color: #818cf8; text-transform: uppercase; background-color: rgba(49, 46, 129, 0.8); border: 1px solid rgba(99, 102, 241, 0.4); padding: 4px 12px; border-radius: 999px; display: inline-block; margin-bottom: 10px; }
+        .welcome-card h2 { font-size: 1.5rem; font-weight: 900; margin-bottom: 6px; }
+        .welcome-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .subject-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; }
+        .subject-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.3); }
+        .subject-card.ak:hover { border-color: var(--accent-emerald); }
+        .subject-card.gs:hover { border-color: var(--accent-amber); }
+        .card-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 12px; }
+        .ak .card-icon { background-color: rgba(6, 78, 59, 0.6); border: 1px solid rgba(16, 185, 129, 0.4); }
+        .gs .card-icon { background-color: rgba(120, 53, 15, 0.6); border: 1px solid rgba(245, 158, 11, 0.4); }
+        .subject-card h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
+        .subject-subtitle { font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; }
+        .ak .subject-subtitle { color: var(--accent-emerald); }
+        .gs .subject-subtitle { color: var(--accent-amber); }
+        .subject-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 20px; }
+        .card-footer { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; }
+        .ak .card-footer { color: var(--accent-emerald); }
+        .gs .card-footer { color: var(--accent-amber); }
+
+        /* LEERSTOF CARDS */
+        .section-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; margin-bottom: 16px; }
+        .section-title { font-size: 1.05rem; font-weight: 800; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); margin-bottom: 14px; }
+        .gs-title { color: var(--accent-amber); }
+        .ak-title { color: var(--accent-emerald); }
+
+        .qa-item { background-color: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+        .qa-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .qa-question { font-weight: 700; font-size: 0.9rem; }
+        .qa-actions { display: flex; gap: 6px; }
+        .btn-mini { background-color: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: #a5b4fc; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+        .btn-mini:hover { background-color: rgba(99, 102, 241, 0.3); }
+        .answer-box { display: none; margin-top: 8px; padding: 10px; background-color: rgba(15, 23, 42, 0.9); border-left: 3px solid var(--accent-indigo); border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; }
+
+        /* 3D FLITSKAARTEN */
+        .flashcard-wrapper { display: flex; flex-direction: column; align-items: center; padding: 10px 0; }
+        .perspective-container { perspective: 1000px; width: 100%; max-width: 420px; height: 260px; cursor: pointer; }
+        .flashcard-3d { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+        .flashcard-3d.flipped { transform: rotateY(180deg); }
+        .card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--border-color); }
+        .card-front { background: linear-gradient(135deg, #1e293b, #0f172a); }
+        .card-back { background: linear-gradient(135deg, #312e81, #1e1b4b); border-color: #6366f1; transform: rotateY(180deg); }
+        .card-tag { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: #818cf8; }
+        .card-body-text { font-size: 1.15rem; font-weight: 800; text-align: center; line-height: 1.4; }
+
+        .controls-row { display: flex; gap: 10px; width: 100%; max-width: 420px; margin-top: 16px; }
+        .control-btn { flex: 1; padding: 10px; border-radius: 12px; border: 1px solid var(--border-color); background-color: var(--bg-card); color: var(--text-main); font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+        .control-btn.primary { background-color: var(--accent-indigo); border-color: var(--accent-indigo); }
+        .control-btn.danger { background-color: #991b1b; border-color: #7f1d1d; }
+
+        /* INPUTS & PROEFWERK */
+        textarea, select, input[type="number"] { width: 100%; background-color: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; color: var(--text-main); font-size: 0.85rem; margin-top: 8px; }
+        .opt-btn { width: 100%; text-align: left; padding: 12px; background-color: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 0.85rem; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; }
+        .opt-btn:hover { border-color: var(--accent-indigo); background-color: rgba(99, 102, 241, 0.1); }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo-group" onclick="showSubjectSelection()">
+                <div class="logo-icon">10</div>
+                <div class="logo-text">
+                    <h1>10 KRIJGEN</h1>
+                    <p>2 VWO Studieportaal</p>
+                </div>
+            </div>
+
+            <div class="header-stats">
+                <button id="change-subject-btn" class="action-btn hidden" onclick="showSubjectSelection()">🔄 Wissel Vak</button>
+                <div class="pill">🔥 <strong id="streak-counter">1</strong> Dagen</div>
+                <div class="pill">⚡ <strong id="xp-counter">0</strong> XP <span style="color: #818cf8; margin-left:2px;" id="level-badge">Lvl 1 - Rekruut</span></div>
+                <button class="action-btn" onclick="exportData()" title="Exporteer Voortgang">💾</button>
+                <button class="action-btn" onclick="importData()" title="Importeer Voortgang">📥</button>
+                <button class="action-btn" onclick="resetData()" title="Reset Alles">🗑️</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+
+        <!-- VAK SELECTIE SCHERM -->
+        <div id="subject-selection">
+            <div class="welcome-card">
+                <span class="welcome-badge">Kies je vak</span>
+                <h2>Welkom bij 10krijgen!</h2>
+                <p>Selecteer hieronder het vak dat je wilt gaan oefenen voor 2 VWO.</p>
+            </div>
+
+            <div class="subjects-grid">
+                <!-- Aardrijkskunde -->
+                <div class="subject-card ak" onclick="selectSubject('aardrijkskunde')">
+                    <div>
+                        <div class="card-icon">🌍</div>
+                        <h3>Aardrijkskunde</h3>
+                        <div class="subject-subtitle">buiteNLand • Hoofdstuk 1 (§1.1 t/m §1.4)</div>
+                        <div class="subject-desc">
+                            Gebergtevorming, mechanische & chemische verwering, massabewegingen, erosie, V/U-dalen en sedimentatie.
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span>Start Vakoverzicht</span>
+                        <span>➔</span>
+                    </div>
+                </div>
+
+                <!-- Geschiedenis -->
+                <div class="subject-card gs" onclick="selectSubject('geschiedenis')">
+                    <div>
+                        <div class="card-icon">🏛️</div>
+                        <h3>Geschiedenis</h3>
+                        <div class="subject-subtitle">Geschiedenis Werkplaats • Hoofdstuk 1 (§1.1 t/m §1.5)</div>
+                        <div class="subject-desc">
+                            Europese overzeese expansie, Vasco da Gama, Jan Huygen van Linschoten, Bartolomé de las Casas & Trans-Atlantische slavenhandel.
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span>Start Vakoverzicht</span>
+                        <span>➔</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VAK INHOUD -->
+        <div id="subject-content" class="hidden">
+            
+            <nav>
+                <button onclick="switchTab('leerstof')" id="btn-leerstof" class="nav-btn active">📚 Leerstof</button>
+                <button onclick="switchTab('flitskaarten')" id="btn-flitskaarten" class="nav-btn">🃏 Flitskaarten</button>
+                <button onclick="switchTab('foutentrainer')" id="btn-foutentrainer" class="nav-btn">❌ Foutentrainer (<span id="error-count">0</span>)</button>
+                <button onclick="switchTab('oor')" id="btn-oor" class="nav-btn">🔗 OOR-Trainer</button>
+                <button onclick="switchTab('proefwerk')" id="btn-proefwerk" class="nav-btn">📝 Proefwerk</button>
+            </nav>
+
+            <!-- 1. LEERSTOF TAB -->
+            <div id="tab-leerstof">
+                <!-- Geschiedenis -->
+                <div id="content-geschiedenis" class="hidden">
+                    <div class="section-card">
+                        <div class="section-title gs-title">§1.1 Rijken rond de Middellandse Zee</div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">Venetië en Genua</span>
+                                <div class="qa-actions">
+                                    <button class="btn-mini" onclick="speakText('Venetië en Genua: Machtige Italiaanse handelssteden die rijk werden door tussenhandel.')">🔊</button>
+                                    <button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button>
+                                </div>
+                            </div>
+                            <div class="answer-box">Machtige Italiaanse handelssteden die rijk werden door de tussenhandel in oosterse luxeartikelen (specerijen, zijde) via de Middellandse Zee.</div>
+                        </div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">Ottomaanse Rijk (Osmaanse Rijk)</span>
+                                <div class="qa-actions">
+                                    <button class="btn-mini" onclick="speakText('Ottomaanse Rijk: Turks moslimrijk dat in 1453 Constantinopel innam.')">🔊</button>
+                                    <button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button>
+                                </div>
+                            </div>
+                            <div class="answer-box">Turks-islamitisch rijk dat zich uitbreidde rond de Middellandse Zee en in 1453 Constantinopel veroverde, waardoor zij de handelsroutes naar Azië beheersten.</div>
+                        </div>
+                    </div>
+
+                    <div class="section-card">
+                        <div class="section-title gs-title">§1.2 t/m §1.5 Ontdekkers, Amerika & Handel</div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">Songhairijk & Timboektoe</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">Machtig West-Afrikaans rijk rijk geworden door de trans-Saharahandel in goud, zout en slaafgemaakten.</div>
+                        </div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">Vasco da Gama (1498) & Jan Huygen van Linschoten</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">Da Gama ontdekte de zeeroute om Afrika naar Indië. Van Linschoten stal de geheime Portugese vaarroutes en schreef ze op.</div>
+                        </div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">Bartolomé de las Casas</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">Spaanse priester die opkwam voor de rechten van de indianen en protesteerde tegen de wrede dwangarbeid.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aardrijkskunde -->
+                <div id="content-aardrijkskunde" class="hidden">
+                    <div class="section-card">
+                        <div class="section-title ak-title">§1.1 t/m §1.4 Aardrijkskunde Begrippen</div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">Endogene vs. Exogene Krachten</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon antwoord</button></div>
+                            </div>
+                            <div class="answer-box">Endogeen = van binnenuit de aarde (platentektoniek, vulkanisme). Exogeen = van buitenaf (wind, regen, vorst, verwering).</div>
+                        </div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">Sedimentatievolgorde van een rivier</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon antwoord</button></div>
+                            </div>
+                            <div class="answer-box">Van zwaar naar licht als de stroomsnelheid afneemt: 1. Grind, 2. Zand, 3. Klei.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. FLITSKAARTEN TAB -->
+            <div id="tab-flitskaarten" class="hidden">
+                <div class="flashcard-wrapper">
+                    <div class="perspective-container" onclick="flipCard()">
+                        <div id="flashcard" class="flashcard-3d">
+                            <div class="card-face card-front">
+                                <span class="card-tag">Begrip</span>
+                                <div id="fc-front" class="card-body-text">Laden...</div>
+                                <span id="fc-counter" style="font-size: 0.75rem; color: var(--text-muted); text-align: center;">Kaart 1</span>
+                            </div>
+                            <div class="card-face card-back">
+                                <span class="card-tag" style="color: #a5b4fc;">Betekenis</span>
+                                <div id="fc-back" class="card-body-text" style="font-size: 0.95rem; font-weight: 500;">Laden...</div>
+                                <span style="font-size: 0.75rem; color: #c7d2fe; text-align: center;">Klik om te draaien 🔄</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="controls-row">
+                        <button class="control-btn danger" onclick="markCardError()">❌ Fout (Naar Foutentrainer)</button>
+                        <button class="control-btn primary" onclick="nextCard(1)">✅ Goed (+5 XP)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. FOUTENTRAINER TAB -->
+            <div id="tab-foutentrainer" class="hidden">
+                <div class="section-card">
+                    <div class="section-title gs-title">❌ Spaced-Repetition Foutentrainer</div>
+                    <p style="font-size:0.85rem; color: var(--text-muted); margin-bottom:12px;">Hier staan alle begrippen die je eerder fout hebt gemarkeerd.</p>
+                    <div id="error-list"></div>
+                </div>
+            </div>
+
+            <!-- 4. OOR TRAINER TAB -->
+            <div id="tab-oor" class="hidden">
+                <div class="section-card">
+                    <div class="section-title gs-title">🔗 Oorzaak & Gevolg Trainer (Dynamisch)</div>
+                    <button class="control-btn" style="background-color: var(--bg-card-hover); margin-bottom: 12px;" onclick="generateOORQuestion()">🔄 Genereer Nieuwe OOR-Vraag</button>
+                    <p id="oor-vraag" style="font-size: 0.95rem; font-weight: 600; margin-bottom: 10px;">Klik op de knop hierboven om een vraag te laden...</p>
+                    <textarea id="oor-input" rows="4" placeholder="Typ je uitgebreide antwoord in volzinnen..."></textarea>
+                    <button class="control-btn primary" style="margin-top: 10px;" onclick="checkOOR()">Controleer Antwoord (+15 XP)</button>
+                    <div id="oor-result" class="answer-box" style="margin-top: 12px;"></div>
+                </div>
+            </div>
+
+            <!-- 5. PROEFWERK TAB -->
+            <div id="tab-proefwerk" class="hidden">
+                <div class="section-card">
+                    <div class="section-title gs-title">📝 Proefwerk Simulatie met N-Term</div>
+                    <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                        <label style="font-size: 0.85rem; font-weight: 700;">N-Term (Normering):</label>
+                        <input type="number" id="n-term" value="1.0" step="0.1" min="0.5" max="2.0" style="width: 80px; margin-top: 0;">
+                    </div>
+                    
+                    <div id="pw-quiz-box">
+                        <p id="pw-question" style="font-weight: 800; font-size: 1rem; margin-bottom: 12px;">Vraag...</p>
+                        <div id="pw-options"></div>
+                    </div>
+
+                    <div id="pw-result-box" class="hidden" style="text-align: center; padding: 20px;">
+                        <h3 style="font-size: 1.5rem; font-weight: 900;">Toets Voltooid!</h3>
+                        <div style="font-size: 3rem; font-weight: 900; color: var(--accent-indigo); margin: 10px 0;" id="pw-grade">8.5</div>
+                        <p id="pw-details" style="font-size: 0.9rem; color: var(--text-muted);"></p>
+                        <button class="control-btn primary" style="margin-top: 14px; max-width: 200px;" onclick="startProefwerk()">Nieuwe Toets Starten</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        /* RANGEN & XP SYSTEM */
+        let xp = parseInt(localStorage.getItem('10k_xp')) || 0;
+        let streak = parseInt(localStorage.getItem('10k_streak')) || 1;
+        let errorCards = JSON.parse(localStorage.getItem('10k_errors')) || [];
+
+        const ranks = ["Rekruut", "Schildknaap", "Verkenner", "Geleerde", "Meester", "Grootmeester", "Legende", "Koning van de 10", "Keizer", "Onverslaanbaar"];
+
+        function updateXP(amount) {
+            xp += amount;
+            localStorage.setItem('10k_xp', xp);
+            document.getElementById('xp-counter').textContent = xp;
+            document.getElementById('streak-counter').textContent = streak;
+            
+            let lvl = Math.floor(xp / 50) + 1;
+            let rankName = ranks[Math.min(lvl - 1, ranks.length - 1)];
+            document.getElementById('level-badge').textContent = `Lvl ${lvl} - ${rankName}`;
+            document.getElementById('error-count').textContent = errorCards.length;
+        }
+
+        /* DATA STRUCTURE & GENERATOR POOLS */
+        let activeSubject = null;
+
+        const subjectData = {
+            geschiedenis: {
+                title: "Geschiedenis",
+                cards: [
+                    {front: "Venetië & Genua", back: "Rijke Italiaanse handelssteden die fortuin verdienden met de tussenhandel."},
+                    {front: "Ottomaanse Rijk", back: "Turks moslimrijk dat na de inname van Constantinopel (1453) handelsroutes beheerste."},
+                    {front: "Vasco da Gama", back: "Portugese ontdekkingsreiziger die in 1498 als eerste om Afrika heen naar India voer."},
+                    {front: "Conquistadores", back: "Spaanse veroveraars (zoals Cortés) die inheemse rijken onderwierpen."},
+                    {front: "Bartolomé de las Casas", back: "Spaanse priester die opkwam voor de rechten van de inheemse Amerikanen."}
+                ]
+            },
+            aardrijkskunde: {
+                title: "Aardrijkskunde",
+                cards: [
+                    {front: "Endogene krachten", back: "Krachten vanuit het binnenste van de aarde (platentektoniek)."},
+                    {front: "Exogene krachten", back: "Krachten van buitenaf op de aardkorst (wind, vorst, regen, verwering)."},
+                    {front: "Sedimentatievolgorde", back: "Afzetting van een rivier: van zwaar naar licht (Grind -> Zand -> Klei)."}
+                ]
+            }
+        };
+
+        // Dynamische OOR Vragenpool
+        const oorQuestionPool = {
+            geschiedenis: [
+                {
+                    q: "Leg uit welk verband er bestaat tussen de val van Constantinopel (1453) en het ontstaan van de Europese ontdekkingsreizen.",
+                    keywords: ['ottoman', 'tussenhandel', 'duur', 'constantinopel', 'zeeroute', 'indie', 'specerijen'],
+                    explanation: "Door de verovering van Constantinopel beheersten de Ottomanen de landroutes. De tussenhandel werd erg duur, waardoor Europeanen een directe route over zee zochten."
+                },
+                {
+                    q: "Leg uit hoe de komst van de Spaanse conquistadores leidde tot een enorme afname van de inheemse bevolking in Amerika.",
+                    keywords: ['ziektes', 'pokken', 'afweer', 'wapens', 'dwangarbeid'],
+                    explanation: "Naast wapens brachten Spanjaarden dodelijke Europese ziektes (pokken) mee waar de indianen geen afweer tegen hadden."
+                }
+            ],
+            aardrijkskunde: [
+                {
+                    q: "Leg uit hoe de stroomsnelheid van een rivier beïnvloedt welk materiaal (grind, zand, klei) waar wordt gesedimenteerd.",
+                    keywords: ['stroomsnelheid', 'zwaar', 'grind', 'licht', 'klei', 'afnemen', 'monding'],
+                    explanation: "In de bovenloop stroomt de rivier snel en neemt grind mee. Bij afnemende snelheid zakt eerst grind, dan zand en pas bij de monding klei."
+                },
+                {
+                    q: "Wat is het verschil in werking tussen mechanische vorstverwering en chemische verwering?",
+                    keywords: ['spleten', 'water', 'bevriezen', 'uitzetten', 'oplossen', 'zuur', 'gesteente'],
+                    explanation: "Vorstverwering breekt steen doordat water uitzet in spleten. Chemische verwering lost het gesteente op door inwerking van water en zuren."
+                }
+            ]
+        };
+
+        // Dynamische Proefwerk Vragenpool
+        const quizGeneratorPool = {
+            geschiedenis: [
+                { q: "Welke Italiaanse steden hadden een monopolie op de tussenhandel in oosterse goederen?", opts: ["Rome en Napels", "Venetië en Genua", "Florence en Milaan", "Madrid en Lissabon"], correct: 1 },
+                { q: "In welk jaar werd Constantinopel veroverd door het Ottomaanse Rijk?", opts: ["1492", "1488", "1453", "1595"], correct: 2 },
+                { q: "Wie was de Spaanse priester die opkwam voor de rechten van de indianen?", opts: ["Hernán Cortés", "Jan Huygen van Linschoten", "Bartolomé de las Casas", "Bartolomeu Dias"], correct: 1 }
+            ],
+            aardrijkskunde: [
+                { q: "Welke krachten op de aarde ontstaan vanuit het binnenste van de aardkorst?", opts: ["Exogene krachten", "Endogene krachten", "Verweringskrachten", "Sedimentatiekrachten"], correct: 1 },
+                { q: "In welke volgorde zet een rivier materiaal af bij afnemende stroomsnelheid?", opts: ["Klei -> Zand -> Grind", "Grind -> Zand -> Klei", "Zand -> Grind -> Klei", "Grind -> Klei -> Zand"], correct: 1 }
+            ]
+        };
+
+        function selectSubject(sub) {
+            activeSubject = sub;
+            document.getElementById('subject-selection').classList.add('hidden');
+            document.getElementById('subject-content').classList.remove('hidden');
+            document.getElementById('change-subject-btn').classList.remove('hidden');
+
+            document.getElementById('content-geschiedenis').classList.toggle('hidden', sub !== 'geschiedenis');
+            document.getElementById('content-aardrijkskunde').classList.toggle('hidden', sub !== 'aardrijkskunde');
+
+            currentCard = 0;
+            loadFlashcardData();
+            generateOORQuestion();
+            startProefwerk();
+            renderErrorCards();
+            switchTab('leerstof');
+        }
+
+        function showSubjectSelection() {
+            document.getElementById('subject-selection').classList.remove('hidden');
+            document.getElementById('subject-content').classList.add('hidden');
+            document.getElementById('change-subject-btn').classList.add('hidden');
+        }
+
+        function switchTab(tab) {
+            ['leerstof', 'flitskaarten', 'foutentrainer', 'oor', 'proefwerk'].forEach(t => {
+                document.getElementById('tab-' + t).classList.add('hidden');
+                document.getElementById('btn-' + t).classList.remove('active');
+            });
+            document.getElementById('tab-' + tab).classList.remove('hidden');
+            document.getElementById('btn-' + tab).classList.add('active');
+        }
+
+        function toggleAnswer(btn) {
+            const box = btn.parentElement.parentElement.nextElementSibling || btn.nextElementSibling;
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+            } else {
+                box.style.display = 'block';
+                updateXP(2);
+            }
+        }
+
+        /* TEXT TO SPEECH */
+        function speakText(txt) {
+            if ('speechSynthesis' in window) {
+                const msg = new SpeechSynthesisUtterance(txt);
+                msg.lang = 'nl-NL';
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
+        /* FLASHCARDS */
+        let currentCard = 0;
+        let isFlipped = false;
+
+        function loadFlashcardData() {
+            if (!activeSubject) return;
+            const cards = subjectData[activeSubject].cards;
+            document.getElementById('fc-front').textContent = cards[currentCard].front;
+            document.getElementById('fc-back').textContent = cards[currentCard].back;
+            document.getElementById('fc-counter').textContent = `Kaart ${currentCard + 1} van ${cards.length}`;
+            document.getElementById('flashcard').classList.remove('flipped');
+            isFlipped = false;
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+        }
+
+        function nextCard(dir) {
+            const cards = subjectData[activeSubject].cards;
+            currentCard = (currentCard + dir + cards.length) % cards.length;
+            if (isFlipped) flipCard();
+            setTimeout(loadFlashcardData, 150);
+            if (dir > 0) updateXP(5);
+        }
+
+        function markCardError() {
+            const card = subjectData[activeSubject].cards[currentCard];
+            if (!errorCards.some(e => e.front === card.front)) {
+                errorCards.push(card);
+                localStorage.setItem('10k_errors', JSON.stringify(errorCards));
+                renderErrorCards();
+            }
+            nextCard(1);
+        }
+
+        function renderErrorCards() {
+            const list = document.getElementById('error-list');
+            document.getElementById('error-count').textContent = errorCards.length;
+            if (errorCards.length === 0) {
+                list.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">Geen fouten opgeslagen! Goed bezig! 🎉</p>';
+                return;
+            }
+            list.innerHTML = '';
+            errorCards.forEach((item, idx) => {
+                list.innerHTML += `
+                    <div class="qa-item">
+                        <div class="qa-header">
+                            <span class="qa-question">${item.front}</span>
+                            <button class="btn-mini" onclick="removeError(${idx})">Opgehelderd ✅</button>
+                        </div>
+                        <div style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">${item.back}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function removeError(idx) {
+            errorCards.splice(idx, 1);
+            localStorage.setItem('10k_errors', JSON.stringify(errorCards));
+            renderErrorCards();
+            updateXP(10);
+        }
+
+        /* OOR GENERATOR & TRAINER */
+        let currentOORIndex = 0;
+
+        function generateOORQuestion() {
+            if (!activeSubject) return;
+            const pool = oorQuestionPool[activeSubject];
+            currentOORIndex = Math.floor(Math.random() * pool.length);
+            const currentQ = pool[currentOORIndex];
+            
+            document.getElementById('oor-vraag').textContent = currentQ.q;
+            document.getElementById('oor-input').value = '';
+            document.getElementById('oor-result').style.display = 'none';
+        }
+
+        function checkOOR() {
+            const input = document.getElementById('oor-input').value.toLowerCase();
+            const currentQ = oorQuestionPool[activeSubject][currentOORIndex];
+            const res = document.getElementById('oor-result');
+            res.style.display = 'block';
+
+            const matches = currentQ.keywords.filter(k => input.includes(k));
+            if (matches.length >= 2) {
+                res.innerHTML = `<strong>Uitstekend geantwoord! (+15 XP)</strong><br>Kernbegrippen gevonden: <em>${matches.join(', ')}</em>.<br><br><span style="font-size:0.8rem; color:var(--text-muted);"><strong>Uitleg:</strong> ${currentQ.explanation}</span>`;
+                updateXP(15);
+            } else if (matches.length === 1) {
+                res.innerHTML = `<strong>Aardig op weg! (+5 XP)</strong><br>Je gebruikte het begrip <em>${matches[0]}</em>. Probeer je antwoord completer te maken.<br><br><span style="font-size:0.8rem; color:var(--text-muted);"><strong>Uitleg:</strong> ${currentQ.explanation}</span>`;
+                updateXP(5);
+            } else {
+                res.innerHTML = `<strong>Nog even oefenen!</strong> Probeer meer specifieke kernwoorden te gebruiken.<br><br><span style="font-size:0.8rem; color:var(--text-muted);"><strong>Uitleg:</strong> ${currentQ.explanation}</span>`;
+            }
+        }
+
+        /* PROEFWERK GENERATOR */
+        let pwQuestions = [];
+        let pwIndex = 0;
+        let pwScore = 0;
+
+        function startProefwerk() {
+            if (!activeSubject) return;
+            pwIndex = 0;
+            pwScore = 0;
+
+            const rawPool = [...quizGeneratorPool[activeSubject]];
+            pwQuestions = rawPool.sort(() => Math.random() - 0.5);
+
+            document.getElementById('pw-quiz-box').classList.remove('hidden');
+            document.getElementById('pw-result-box').classList.add('hidden');
+            showPWQuestion();
+        }
+
+        function showPWQuestion() {
+            if (pwIndex >= pwQuestions.length) {
+                finishProefwerk();
+                return;
+            }
+            const q = pwQuestions[pwIndex];
+            document.getElementById('pw-question').textContent = `Vraag ${pwIndex + 1} van ${pwQuestions.length}: ${q.q}`;
+            const opts = document.getElementById('pw-options');
+            opts.innerHTML = '';
+            q.opts.forEach((opt, idx) => {
+                opts.innerHTML += `<button class="opt-btn" onclick="answerPW(${idx})">${opt}</button>`;
+            });
+        }
+
+        function answerPW(idx) {
+            const q = pwQuestions[pwIndex];
+            if (idx === q.correct) pwScore++;
+            pwIndex++;
+            showPWQuestion();
+        }
+
+        function finishProefwerk() {
+            document.getElementById('pw-quiz-box').classList.add('hidden');
+            document.getElementById('pw-result-box').classList.remove('hidden');
+
+            const nTerm = parseFloat(document.getElementById('n-term').value) || 1.0;
+            let grade = ((pwScore / pwQuestions.length) * 9 + nTerm).toFixed(1);
+            grade = Math.min(Math.max(grade, 1.0), 10.0);
+
+            document.getElementById('pw-grade').textContent = grade;
+            document.getElementById('pw-details').textContent = `Je behaalde ${pwScore} van de ${pwQuestions.length} vragen goed.`;
+            updateXP(pwScore * 10);
+        }
+
+        /* DATA MANAGEMENT */
+        function exportData() {
+            const data = { xp, streak, errorCards };
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = '10krijgen_voortgang.json';
+            a.click();
+        }
+
+        function importData() {
+            const str = prompt("Plak je JSON voortgangsdata hier:");
+            if (str) {
+                try {
+                    const data = JSON.parse(str);
+                    xp = data.xp || 0;
+                    streak = data.streak || 1;
+                    errorCards = data.errorCards || [];
+                    localStorage.setItem('10k_xp', xp);
+                    localStorage.setItem('10k_streak', streak);
+                    localStorage.setItem('10k_errors', JSON.stringify(errorCards));
+                    updateXP(0);
+                    alert("Voortgang succesvol ingeladen!");
+                } catch(e) {
+                    alert("Ongeldige data!");
+                }
+            }
+        }
+
+        function resetData() {
+            if (confirm("Weet je zeker dat je alle XP en opgeslagen fouten wilt wissen?")) {
+                localStorage.clear();
+                xp = 0;
+                streak = 1;
+                errorCards = [];
+                updateXP(0);
+                alert("Data gereset!");
+            }
+        }
+
+        updateXP(0);
+    </script>
+</body>
+</html>
