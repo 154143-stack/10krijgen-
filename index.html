@@ -182,7 +182,7 @@
                 <button onclick="switchTab('leerstof')" id="btn-leerstof" class="nav-btn active">📚 Leerstof</button>
                 <button onclick="switchTab('flitskaarten')" id="btn-flitskaarten" class="nav-btn">🃏 Flitskaarten</button>
                 <button onclick="switchTab('foutentrainer')" id="btn-foutentrainer" class="nav-btn">❌ Foutentrainer (<span id="error-count">0</span>)</button>
-                <button onclick="switchTab('oor')" id="btn-oor" class="nav-btn">🔗 OOR-Trainer</button>
+                <button onclick="switchTab('oor')" id="btn-oor" class="nav-btn">🔗 OOR-Generator</button>
                 <button onclick="switchTab('proefwerk')" id="btn-proefwerk" class="nav-btn">📝 Proefwerk</button>
             </nav>
 
@@ -347,10 +347,10 @@
             <!-- 4. OOR TRAINER TAB -->
             <div id="tab-oor" class="hidden">
                 <div class="section-card">
-                    <div class="section-title gs-title">🔗 Dynamische Oorzaak & Gevolg Generator</div>
-                    <button class="control-btn" style="background-color: var(--bg-card-hover); margin-bottom: 12px;" onclick="generateDynamicOOR()">🔄 Genereer Gloednieuwe OOR-Vraag</button>
-                    <p id="oor-vraag" style="font-size: 0.95rem; font-weight: 600; margin-bottom: 10px;">Klik op de knop om een vraag te genereren...</p>
-                    <textarea id="oor-input" rows="4" placeholder="Typ je uitgebreide volzin antwoord met kernbegrippen..."></textarea>
+                    <div class="section-title gs-title">⚡ Procedural OOR Vragengenerator (Live Generatie)</div>
+                    <button class="control-btn" style="background-color: var(--bg-card-hover); margin-bottom: 12px;" onclick="generateProceduralOOR()">🎲 Genereer Unieke OOR-Vraag</button>
+                    <p id="oor-vraag" style="font-size: 0.95rem; font-weight: 600; margin-bottom: 10px;">Klik op de knop om een gloednieuwe vraag samen te stellen...</p>
+                    <textarea id="oor-input" rows="4" placeholder="Typ je uitgebreide antwoord met oorzaken, gevolgen en kernbegrippen..."></textarea>
                     <button class="control-btn primary" style="margin-top: 10px;" onclick="checkOOR()">Controleer Antwoord (+15 XP)</button>
                     <div id="oor-result" class="answer-box" style="margin-top: 12px;"></div>
                 </div>
@@ -405,121 +405,83 @@
 
         let activeSubject = null;
 
-        const subjectData = {
-            geschiedenis: {
-                title: "Geschiedenis",
-                cards: [
-                    {front: "Venetië & Genua", back: "Italiaanse handelssteden met monopolie op oosterse tussenhandel."},
-                    {front: "Ottomaanse Rijk", back: "Turks moslimrijk dat in 1453 Constantinopel innam."},
-                    {front: "Songhairijk", back: "West-Afrikaans rijk rijk door trans-Saharahandel in goud en zout."},
-                    {front: "Vasco da Gama", back: "Voer in 1498 als eerste via Afrika naar India."},
-                    {front: "Jan Huygen van Linschoten", back: "Nederlander die geheime Portugese vaarroutes stal en opschreef."},
-                    {front: "Bartolomé de las Casas", back: "Spaanse priester die opkwam voor de indianen."}
-                ]
-            },
-            aardrijkskunde: {
-                title: "Aardrijkskunde",
-                cards: [
-                    {front: "Endogene krachten", back: "Krachten vanuit het binnenste van de aarde."},
-                    {front: "Exogene krachten", back: "Krachten van buitenaf op de aardkorst (wind, water, vorst)."},
-                    {front: "Mechanische verwering", back: "Gesteente verbrokkelt zonder chemische verandering."},
-                    {front: "Sedimentatievolgorde", back: "Afzetting rivier: Grind -> Zand -> Klei."},
-                    {front: "V-dal vs U-dal", back: "V-dal door riviererosie; U-dal door gletsjers."}
-                ]
-            }
+        /* BEGRIPPEN & KENNISBASIS */
+        const knowledgeBase = {
+            geschiedenis: [
+                { term: "Venetië & Genua", def: "Machtige Italiaanse handelssteden met monopolie op oosterse tussenhandel.", keywords: ['venetië', 'genua', 'tussenhandel', 'oosterse', 'monopolie'] },
+                { term: "Ottomaanse Rijk (1453)", def: "Turks moslimrijk dat Constantinopel veroverde en landroutes afsloot.", keywords: ['ottomaan', 'constantinopel', '1453', 'landroute', 'zeeroute'] },
+                { term: "Songhairijk", def: "West-Afrikaans rijk rijk door trans-Saharahandel in goud en zout.", keywords: ['songhai', 'timboektoe', 'goud', 'zout', 'sahara'] },
+                { term: "Vasco da Gama (1498)", def: "Portugese ontdekkingsreiziger die als eerste om Afrika naar India voer.", keywords: ['vasco', 'gama', 'india', 'afrika', 'zeeroute'] },
+                { term: "Jan Huygen van Linschoten", def: "Nederlander die geheime Portugese vaarroutes stal en opschreef.", keywords: ['linschoten', 'portugese', 'geheim', 'vaarroutes', 'kaarten'] },
+                { term: "Trans-Atlantische Slavenhandel", def: "Driehoekshandel tussen Europa, Afrika en Amerika.", keywords: ['driehoekshandel', 'afrika', 'amerika', 'slaafgemaakten', 'plantages'] },
+                { term: "Bartolomé de las Casas", def: "Spaanse priester die opkwam voor de rechten van de indianen.", keywords: ['las casas', 'priester', 'indianen', 'mishandeling', 'rechten'] }
+            ],
+            aardrijkskunde: [
+                { term: "Endogene krachten", def: "Krachten vanuit het binnenste van de aardkorst (platentektoniek).", keywords: ['endogeen', 'binnenste', 'platentektoniek', 'vulkanisme', 'aardbeving'] },
+                { term: "Exogene krachten", def: "Krachten van buitenaf op de aardkorst (wind, water, ijs, verwering).", keywords: ['exogeen', 'buitenaf', 'wind', 'water', 'verwering'] },
+                { term: "Mechanische verwering", def: "Verbrokkeling van gesteente zonder chemische verandering (bijv. vorst).", keywords: ['mechanisch', 'vorst', 'spleten', 'uitzetten', 'verbrokkelen'] },
+                { term: "Chemische verwering", def: "Oplossen of veranderen van gesteente door zuren en water.", keywords: ['chemisch', 'zuren', 'oplossen', 'water', 'kalksteen'] },
+                { term: "Sedimentatievolgorde", def: "Afzetting van een rivier van zwaar naar licht: Grind -> Zand -> Klei.", keywords: ['sedimentatie', 'stroomsnelheid', 'grind', 'zand', 'klei'] },
+                { term: "V-dal vs U-dal", def: "V-dal ontstaat door snelle rivieren; U-dal door schurende gletsjers.", keywords: ['v-dal', 'u-dal', 'rivier', 'gletsjer', 'erosie'] }
+            ]
         };
 
-        /* LIVE ZOEKFILTER VOOR LEERSTOF */
-        function filterLeerstof() {
-            const query = document.getElementById('live-search').value.toLowerCase();
-            const items = document.querySelectorAll('.search-target');
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(query) ? 'block' : 'none';
-            });
-        }
+        /* ---------------------------------------------------------
+           PROCEDURAL OOR GENERATOR (Bouwt ELKE KEER een NIEUWE vraag)
+           --------------------------------------------------------- */
+        let activeOORKeywords = [];
+        let activeOORExplanation = "";
 
-        /* DYNAMISCHE OOR-GENERATOR */
-        let activeOORData = null;
-
-        function generateDynamicOOR() {
+        function generateProceduralOOR() {
             if (!activeSubject) return;
-            
-            if (activeSubject === 'geschiedenis') {
-                const scenarios = [
-                    {
-                        q: "Leg uit hoe de inname van Constantinopel in 1453 door het Ottomaanse Rijk leidde tot de zoektocht naar een nieuwe zeeroute naar Azië.",
-                        keywords: ['ottoman', 'constantinopel', 'tussenhandel', 'duur', 'landroutes', 'specerijen'],
-                        explanation: "Het Ottomaanse Rijk blokkeerde en beheerste de traditionele landroutes naar Azië. De handel werd duur en gevaarlijk, waardoor Europeanen gedwongen waren een alternatieve zeeroute te ontdekken."
-                    },
-                    {
-                        q: "Verklaar hoe de Spaanse conquistadores (zoals Cortés en Pizarro) zo snel de grote inheemse rijken in Amerika konden onderwerpen.",
-                        keywords: ['wapens', 'paarden', 'ziektes', 'pokken', 'afweer', 'inheemse'],
-                        explanation: "Naast superieure militaire wapens en paarden speelden Europese ziektes (zoals de pokken) de grootste rol; de inheemse bevolking had hier geen immuniteit tegen."
-                    },
-                    {
-                        q: "Wat was de economische betekenis van de Trans-Atlantische Driehoekshandel voor Europa, Afrika en Amerika?",
-                        keywords: ['nijverheid', 'slaafgemaakten', 'plantages', 'suiker', 'driehoek', 'europa'],
-                        explanation: "Europa leverde goederen aan Afrika in ruil voor slaafgemaakten, die in Amerika op plantages werkten om grondstoffen te produceren voor de Europese markt."
-                    }
-                ];
-                activeOORData = scenarios[Math.floor(Math.random() * scenarios.length)];
-            } else {
-                const scenarios = [
-                    {
-                        q: "Leg uit hoe de stroomsnelheid van een rivier in een landschap het sedimentatieproces van grind, zand en klei stuurt.",
-                        keywords: ['stroomsnelheid', 'zwaar', 'grind', 'licht', 'klei', 'afnemen', 'monding'],
-                        explanation: "In de snelle bovenloop wordt zwaar grind meegenomen. Zodra de stroomsnelheid afneemt, bezinkt eerst het grind, dan het zand en pas bij de rustige monding de lichte klei."
-                    },
-                    {
-                        q: "Beschrijf de werking van mechanische vorstverwering in berggebieden en wat het gevolg hiervan is op het gesteente.",
-                        keywords: ['spleten', 'water', 'bevriezen', 'uitzetten', 'druk', 'verbrokkelen'],
-                        explanation: "Water sijpelt in rotsspleten, bevriest en zet daarbij uit. Dit veroorzaakt enorme druk op het gesteente, waardoor het uiteindelijk openbarst en verbrokkelt."
-                    }
-                ];
-                activeOORData = scenarios[Math.floor(Math.random() * scenarios.length)];
+            const items = knowledgeBase[activeSubject];
+
+            // Kies 2 willekeurige, verschillende begrippen uit de databank
+            const itemA = items[Math.floor(Math.random() * items.length)];
+            let itemB = items[Math.floor(Math.random() * items.length)];
+            while (itemB.term === itemA.term) {
+                itemB = items[Math.floor(Math.random() * items.length)];
             }
 
-            document.getElementById('oor-vraag').textContent = activeOORData.q;
+            // Kies willekeurig een vraag-sjabloon (Template)
+            const questionTemplates = [
+                `Leg uit welk oorzakelijk verband er kan bestaan tussen '${itemA.term}' en '${itemB.term}' binnen het vak ${activeSubject}.`,
+                `Stel dat een klasgenoot beweert dat '${itemA.term}' leidde tot veranderingen in '${itemB.term}'. Leg in volzinnen uit of en hoe deze twee begrippen met elkaar te maken hebben.`,
+                `Wat is de historische/geografische relatie tussen het begrip '${itemA.term}' en het ontstaan of werken van '${itemB.term}'?`
+            ];
+
+            const chosenTemplate = questionTemplates[Math.floor(Math.random() * questionTemplates.length)];
+            
+            // Stel de benodigde trefwoorden samen van BEIDE gekoppelde begrippen
+            activeOORKeywords = [...itemA.keywords, ...itemB.keywords];
+            activeOORExplanation = `Een sterk antwoord verbindt beide begrippen: <strong>${itemA.term}</strong> (${itemA.def}) en <strong>${itemB.term}</strong> (${itemB.def}).`;
+
+            document.getElementById('oor-vraag').textContent = chosenTemplate;
             document.getElementById('oor-input').value = '';
             document.getElementById('oor-result').style.display = 'none';
         }
 
         function checkOOR() {
-            if (!activeOORData) return;
+            if (activeOORKeywords.length === 0) return;
             const input = document.getElementById('oor-input').value.toLowerCase();
             const res = document.getElementById('oor-result');
             res.style.display = 'block';
 
-            const matches = activeOORData.keywords.filter(k => input.includes(k));
-            if (matches.length >= 2) {
-                res.innerHTML = `<strong>Uitstekend! (+15 XP)</strong><br>Kernbegrippen gevonden: <em>${matches.join(', ')}</em>.<br><br><span style="font-size:0.8rem; color:var(--text-muted);"><strong>Uitleg:</strong> ${activeOORData.explanation}</span>`;
+            const matches = activeOORKeywords.filter(k => input.includes(k));
+            const uniqueMatches = [...new Set(matches)];
+
+            if (uniqueMatches.length >= 3) {
+                res.innerHTML = `<strong>Fantastisch geantwoord! (+15 XP)</strong><br>Je hebt een duidelijke verbinding gelegd en trefwoorden gebruikt (zoals: <em>${uniqueMatches.join(', ')}</em>).<br><br><span style="font-size:0.8rem; color:var(--text-muted);">${activeOORExplanation}</span>`;
                 updateXP(15);
-            } else if (matches.length === 1) {
-                res.innerHTML = `<strong>Aardig op weg! (+5 XP)</strong><br>Je gebruikte slechts één kernbegrip (<em>${matches[0]}</em>). Benoem er meer!<br><br><span style="font-size:0.8rem; color:var(--text-muted);"><strong>Uitleg:</strong> ${activeOORData.explanation}</span>`;
+            } else if (uniqueMatches.length >= 1) {
+                res.innerHTML = `<strong>Aardig geprobeerd! (+5 XP)</strong><br>Je gebruikte de term(en): <em>${uniqueMatches.join(', ')}</em>. Probeer je antwoord completer te maken door beide begrippen uitgebreider uit te leggen.<br><br><span style="font-size:0.8rem; color:var(--text-muted);">${activeOORExplanation}</span>`;
                 updateXP(5);
             } else {
-                res.innerHTML = `<strong>Nog even oefenen!</strong> Gebruik meer specifieke vakinhoudelijke kernwoorden in je antwoord.<br><br><span style="font-size:0.8rem; color:var(--text-muted);"><strong>Uitleg:</strong> ${activeOORData.explanation}</span>`;
+                res.innerHTML = `<strong>Nog even oefenen!</strong> Gebruik de specifieke definities en kernbegrippen in je volzinnen.<br><br><span style="font-size:0.8rem; color:var(--text-muted);">${activeOORExplanation}</span>`;
             }
         }
 
         /* DYNAMISCHE PROEFWERK GENERATOR */
-        const masterQuizPool = {
-            geschiedenis: [
-                { q: "Welke Italiaanse steden hadden een monopolie op de oosterse tussenhandel?", opts: ["Rome en Napels", "Venetië en Genua", "Florence en Milaan", "Madrid en Lissabon"], correct: 1 },
-                { q: "In welk jaar werd Constantinopel veroverd door het Ottomaanse Rijk?", opts: ["1492", "1488", "1453", "1595"], correct: 2 },
-                { q: "Wie ontdekte in 1498 de zeeroute rond Afrika naar India?", opts: ["Columbus", "Vasco da Gama", "Bartolomeu Dias", "Cortés"], correct: 1 },
-                { q: "Hoe heette het rijke West-Afrikaanse rijk met de stad Timboektoe?", opts: ["Songhairijk", "Incarijk", "Aztekenrijk", "Ottomaanse Rijk"], correct: 0 },
-                { q: "Welke Spaanse priester streed tegen de mishandeling van indianen?", opts: ["Pizarro", "Bartolomé de las Casas", "Jan Huygen van Linschoten", "Dias"], correct: 1 }
-            ],
-            aardrijkskunde: [
-                { q: "Hoe noemen we krachten die van binnenuit de aardkorst werken?", opts: ["Exogene krachten", "Endogene krachten", "Verweringskrachten", "Sedimentatiekrachten"], correct: 1 },
-                { q: "Wat is een voorbeeld van chemische verwering?", opts: ["Vorstverwering in rotsspleten", "Het uitzetten van stenen door zonnewarmte", "Het oplossen van kalksteen door zuur water", "Zandstormen die rotsen afschuren"], correct: 2 },
-                { q: "In welke volgorde zet een rivier sediment af bij afnemende stroomsnelheid?", opts: ["Klei -> Zand -> Grind", "Grind -> Zand -> Klei", "Zand -> Grind -> Klei", "Grind -> Klei -> Zand"], correct: 1 },
-                { q: "Welke landvorm ontstaat door de uitslijping van een gletsjer?", opts: ["Een V-dal", "Een U-dal", "Een delta", "Een estuarium"], correct: 1 }
-            ]
-        };
-
         let pwQuestions = [];
         let pwIndex = 0;
         let pwScore = 0;
@@ -528,9 +490,24 @@
             if (!activeSubject) return;
             pwIndex = 0;
             pwScore = 0;
+            pwQuestions = [];
 
-            const poolCopy = JSON.parse(JSON.stringify(masterQuizPool[activeSubject]));
-            pwQuestions = poolCopy.sort(() => Math.random() - 0.5);
+            const pool = knowledgeBase[activeSubject];
+
+            for (let i = 0; i < 10; i++) {
+                const target = pool[Math.floor(Math.random() * pool.length)];
+                const distractors = pool.filter(item => item.term !== target.term);
+                const shuffledDistractors = distractors.sort(() => Math.random() - 0.5).slice(0, 3);
+
+                const allOptions = [target.def, ...shuffledDistractors.map(d => d.def)].sort(() => Math.random() - 0.5);
+                const correctIndex = allOptions.indexOf(target.def);
+
+                pwQuestions.push({
+                    q: `Wat is de juiste betekenis van het begrip: '${target.term}'?`,
+                    opts: allOptions,
+                    correct: correctIndex
+                });
+            }
 
             document.getElementById('pw-quiz-box').classList.remove('hidden');
             document.getElementById('pw-result-box').classList.add('hidden');
@@ -573,42 +550,14 @@
             updateXP(pwScore * 10);
         }
 
-        /* DATA MANAGEMENT */
-        function exportData() {
-            const data = { xp, streak, errorCards };
-            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = '10krijgen_voortgang.json';
-            a.click();
-        }
-
-        function importData() {
-            const str = prompt("Plak je JSON voortgangsdata hier:");
-            if (str) {
-                try {
-                    const data = JSON.parse(str);
-                    xp = data.xp || 0;
-                    streak = data.streak || 1;
-                    errorCards = data.errorCards || [];
-                    localStorage.setItem('10k_xp', xp);
-                    localStorage.setItem('10k_streak', streak);
-                    localStorage.setItem('10k_errors', JSON.stringify(errorCards));
-                    updateXP(0);
-                    alert("Voortgang ingeladen!");
-                } catch(e) {
-                    alert("Ongeldige data!");
-                }
-            }
-        }
-
-        function resetData() {
-            if (confirm("Weet je zeker dat je alle data wilt wissen?")) {
-                localStorage.clear();
-                xp = 0; streak = 1; errorCards = [];
-                updateXP(0);
-                alert("Gereset!");
-            }
+        /* OVERIGE BASISFUNCTIES */
+        function filterLeerstof() {
+            const query = document.getElementById('live-search').value.toLowerCase();
+            const items = document.querySelectorAll('.search-target');
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(query) ? 'block' : 'none';
+            });
         }
 
         function selectSubject(sub) {
@@ -622,7 +571,7 @@
 
             currentCard = 0;
             loadFlashcardData();
-            generateDynamicOOR();
+            generateProceduralOOR();
             startDynamicProefwerk();
             renderErrorCards();
             switchTab('leerstof');
@@ -662,9 +611,9 @@
 
         function loadFlashcardData() {
             if (!activeSubject) return;
-            const cards = subjectData[activeSubject].cards;
-            document.getElementById('fc-front').textContent = cards[currentCard].front;
-            document.getElementById('fc-back').textContent = cards[currentCard].back;
+            const cards = knowledgeBase[activeSubject];
+            document.getElementById('fc-front').textContent = cards[currentCard].term;
+            document.getElementById('fc-back').textContent = cards[currentCard].def;
             document.getElementById('fc-counter').textContent = `Kaart ${currentCard + 1} van ${cards.length}`;
             document.getElementById('flashcard').classList.remove('flipped');
             isFlipped = false;
@@ -676,7 +625,7 @@
         }
 
         function nextCard(dir) {
-            const cards = subjectData[activeSubject].cards;
+            const cards = knowledgeBase[activeSubject];
             currentCard = (currentCard + dir + cards.length) % cards.length;
             if (isFlipped) flipCard();
             setTimeout(loadFlashcardData, 150);
@@ -684,9 +633,9 @@
         }
 
         function markCardError() {
-            const card = subjectData[activeSubject].cards[currentCard];
-            if (!errorCards.some(e => e.front === card.front)) {
-                errorCards.push(card);
+            const card = knowledgeBase[activeSubject][currentCard];
+            if (!errorCards.some(e => e.front === card.term)) {
+                errorCards.push({ front: card.term, back: card.def });
                 localStorage.setItem('10k_errors', JSON.stringify(errorCards));
                 renderErrorCards();
             }
@@ -719,6 +668,43 @@
             localStorage.setItem('10k_errors', JSON.stringify(errorCards));
             renderErrorCards();
             updateXP(10);
+        }
+
+        function exportData() {
+            const data = { xp, streak, errorCards };
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = '10krijgen_voortgang.json';
+            a.click();
+        }
+
+        function importData() {
+            const str = prompt("Plak je JSON voortgangsdata hier:");
+            if (str) {
+                try {
+                    const data = JSON.parse(str);
+                    xp = data.xp || 0;
+                    streak = data.streak || 1;
+                    errorCards = data.errorCards || [];
+                    localStorage.setItem('10k_xp', xp);
+                    localStorage.setItem('10k_streak', streak);
+                    localStorage.setItem('10k_errors', JSON.stringify(errorCards));
+                    updateXP(0);
+                    alert("Voortgang ingeladen!");
+                } catch(e) {
+                    alert("Ongeldige data!");
+                }
+            }
+        }
+
+        function resetData() {
+            if (confirm("Weet je zeker dat je alle data wilt wissen?")) {
+                localStorage.clear();
+                xp = 0; streak = 1; errorCards = [];
+                updateXP(0);
+                alert("Gereset!");
+            }
         }
 
         updateXP(0);
