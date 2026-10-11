@@ -347,9 +347,9 @@
             <!-- 4. OOR TRAINER TAB -->
             <div id="tab-oor" class="hidden">
                 <div class="section-card">
-                    <div class="section-title gs-title">⚡ Procedural OOR Vragengenerator (Live Generatie)</div>
-                    <button class="control-btn" style="background-color: var(--bg-card-hover); margin-bottom: 12px;" onclick="generateProceduralOOR()">🎲 Genereer Unieke OOR-Vraag</button>
-                    <p id="oor-vraag" style="font-size: 0.95rem; font-weight: 600; margin-bottom: 10px;">Klik op de knop om een gloednieuwe vraag samen te stellen...</p>
+                    <div class="section-title gs-title">⚡ Onuitputtelijke OOR Vragengenerator</div>
+                    <button class="control-btn" style="background-color: var(--bg-card-hover); margin-bottom: 12px;" onclick="generateInfiniteOOR()">🎲 Genereer Nieuwe Willekeurige Vraag</button>
+                    <p id="oor-vraag" style="font-size: 0.95rem; font-weight: 600; margin-bottom: 10px;">Klik op de knop om een unieke vraag te genereren...</p>
                     <textarea id="oor-input" rows="4" placeholder="Typ je uitgebreide antwoord met oorzaken, gevolgen en kernbegrippen..."></textarea>
                     <button class="control-btn primary" style="margin-top: 10px;" onclick="checkOOR()">Controleer Antwoord (+15 XP)</button>
                     <div id="oor-result" class="answer-box" style="margin-top: 12px;"></div>
@@ -409,7 +409,7 @@
         const knowledgeBase = {
             geschiedenis: [
                 { term: "Venetië & Genua", def: "Machtige Italiaanse handelssteden met monopolie op oosterse tussenhandel.", keywords: ['venetië', 'genua', 'tussenhandel', 'oosterse', 'monopolie'] },
-                { term: "Ottomaanse Rijk (1453)", def: "Turks moslimrijk dat Constantinopel veroverde en landroutes afsloot.", keywords: ['ottomaan', 'constantinopel', '1453', 'landroute', 'zeeroute'] },
+                { term: "Ottomaanse Rijk (1453)", def: "Turks moslimrijk dat Constantinopel veroverde en landroutes afsloot.", keywords: ['ottoman', 'constantinopel', '1453', 'landroute', 'zeeroute'] },
                 { term: "Songhairijk", def: "West-Afrikaans rijk rijk door trans-Saharahandel in goud en zout.", keywords: ['songhai', 'timboektoe', 'goud', 'zout', 'sahara'] },
                 { term: "Vasco da Gama (1498)", def: "Portugese ontdekkingsreiziger die als eerste om Afrika naar India voer.", keywords: ['vasco', 'gama', 'india', 'afrika', 'zeeroute'] },
                 { term: "Jan Huygen van Linschoten", def: "Nederlander die geheime Portugese vaarroutes stal en opschreef.", keywords: ['linschoten', 'portugese', 'geheim', 'vaarroutes', 'kaarten'] },
@@ -427,36 +427,37 @@
         };
 
         /* ---------------------------------------------------------
-           PROCEDURAL OOR GENERATOR (Bouwt ELKE KEER een NIEUWE vraag)
+           EINDELOZE OOR GENERATOR (Combineert willekeurig alle begrippen)
            --------------------------------------------------------- */
         let activeOORKeywords = [];
         let activeOORExplanation = "";
 
-        function generateProceduralOOR() {
+        function generateInfiniteOOR() {
             if (!activeSubject) return;
-            const items = knowledgeBase[activeSubject];
+            const pool = knowledgeBase[activeSubject];
 
-            // Kies 2 willekeurige, verschillende begrippen uit de databank
-            const itemA = items[Math.floor(Math.random() * items.length)];
-            let itemB = items[Math.floor(Math.random() * items.length)];
+            // Pak 2 volstrekt willekeurige begrippen uit de database
+            const itemA = pool[Math.floor(Math.random() * pool.length)];
+            let itemB = pool[Math.floor(Math.random() * pool.length)];
             while (itemB.term === itemA.term) {
-                itemB = items[Math.floor(Math.random() * items.length)];
+                itemB = pool[Math.floor(Math.random() * pool.length)];
             }
 
-            // Kies willekeurig een vraag-sjabloon (Template)
-            const questionTemplates = [
-                `Leg uit welk oorzakelijk verband er kan bestaan tussen '${itemA.term}' en '${itemB.term}' binnen het vak ${activeSubject}.`,
-                `Stel dat een klasgenoot beweert dat '${itemA.term}' leidde tot veranderingen in '${itemB.term}'. Leg in volzinnen uit of en hoe deze twee begrippen met elkaar te maken hebben.`,
-                `Wat is de historische/geografische relatie tussen het begrip '${itemA.term}' en het ontstaan of werken van '${itemB.term}'?`
+            // Willekeurige vraagformuleringen (Templates)
+            const templates = [
+                `Leg in volzinnen uit hoe het begrip '${itemA.term}' verband houdt met of invloed uitoefent op '${itemB.term}'.`,
+                `Wat is de historische of geografische keten van oorzaak en gevolg tussen '${itemA.term}' en '${itemB.term}'?`,
+                `Beschrijf het verband en de interactie tussen '${itemA.term}' en '${itemB.term}' binnen de leerstof van ${activeSubject}.`,
+                `Leg uit welk gevolg het optreden van '${itemA.term}' had op de situatie rondom '${itemB.term}'.`
             ];
 
-            const chosenTemplate = questionTemplates[Math.floor(Math.random() * questionTemplates.length)];
+            const chosenQuestion = templates[Math.floor(Math.random() * templates.length)];
             
-            // Stel de benodigde trefwoorden samen van BEIDE gekoppelde begrippen
+            // Combineer de trefwoorden van beide begrippen
             activeOORKeywords = [...itemA.keywords, ...itemB.keywords];
-            activeOORExplanation = `Een sterk antwoord verbindt beide begrippen: <strong>${itemA.term}</strong> (${itemA.def}) en <strong>${itemB.term}</strong> (${itemB.def}).`;
+            activeOORExplanation = `Een sterk antwoord legt de brug tussen <strong>${itemA.term}</strong> (${itemA.def}) en <strong>${itemB.term}</strong> (${itemB.def}).`;
 
-            document.getElementById('oor-vraag').textContent = chosenTemplate;
+            document.getElementById('oor-vraag').textContent = chosenQuestion;
             document.getElementById('oor-input').value = '';
             document.getElementById('oor-result').style.display = 'none';
         }
@@ -471,13 +472,13 @@
             const uniqueMatches = [...new Set(matches)];
 
             if (uniqueMatches.length >= 3) {
-                res.innerHTML = `<strong>Fantastisch geantwoord! (+15 XP)</strong><br>Je hebt een duidelijke verbinding gelegd en trefwoorden gebruikt (zoals: <em>${uniqueMatches.join(', ')}</em>).<br><br><span style="font-size:0.8rem; color:var(--text-muted);">${activeOORExplanation}</span>`;
+                res.innerHTML = `<strong>Fantastisch geantwoord! (+15 XP)</strong><br>Je hebt relevante kernwoorden gebruikt (zoals: <em>${uniqueMatches.join(', ')}</em>).<br><br><span style="font-size:0.8rem; color:var(--text-muted);">${activeOORExplanation}</span>`;
                 updateXP(15);
             } else if (uniqueMatches.length >= 1) {
-                res.innerHTML = `<strong>Aardig geprobeerd! (+5 XP)</strong><br>Je gebruikte de term(en): <em>${uniqueMatches.join(', ')}</em>. Probeer je antwoord completer te maken door beide begrippen uitgebreider uit te leggen.<br><br><span style="font-size:0.8rem; color:var(--text-muted);">${activeOORExplanation}</span>`;
+                res.innerHTML = `<strong>Aardig geprobeerd! (+5 XP)</strong><br>Je gebruikte de term(en): <em>${uniqueMatches.join(', ')}</em>. Probeer je antwoord completer te maken.<br><br><span style="font-size:0.8rem; color:var(--text-muted);">${activeOORExplanation}</span>`;
                 updateXP(5);
             } else {
-                res.innerHTML = `<strong>Nog even oefenen!</strong> Gebruik de specifieke definities en kernbegrippen in je volzinnen.<br><br><span style="font-size:0.8rem; color:var(--text-muted);">${activeOORExplanation}</span>`;
+                res.innerHTML = `<strong>Nog even oefenen!</strong> Gebruik specifieke definities en kernbegrippen in je volzinnen.<br><br><span style="font-size:0.8rem; color:var(--text-muted);">${activeOORExplanation}</span>`;
             }
         }
 
@@ -571,7 +572,7 @@
 
             currentCard = 0;
             loadFlashcardData();
-            generateProceduralOOR();
+            generateInfiniteOOR();
             startDynamicProefwerk();
             renderErrorCards();
             switchTab('leerstof');
