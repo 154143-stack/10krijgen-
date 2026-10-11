@@ -18,9 +18,7 @@
             --border-color: #334155;
         }
 
-        * { 
-            box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 40px; }
 
         /* HEADER */
@@ -88,7 +86,7 @@
         .card-front { background: linear-gradient(135deg, #1e293b, #0f172a); }
         .card-back { background: linear-gradient(135deg, #312e81, #1e1b4b); border-color: #6366f1; transform: rotateY(180deg); }
         .card-tag { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: #818cf8; }
-        .card-body-text { font-size: 1.15rem; font-weight: 800; text-align: center; line-height: 1.4; }
+        .card-body-text { font-size: 1.1rem; font-weight: 800; text-align: center; line-height: 1.4; }
 
         .controls-row { display: flex; gap: 10px; width: 100%; max-width: 420px; margin-top: 16px; }
         .control-btn { flex: 1; padding: 10px; border-radius: 12px; border: 1px solid var(--border-color); background-color: var(--bg-card); color: var(--text-main); font-weight: 700; cursor: pointer; font-size: 0.85rem; }
@@ -189,7 +187,7 @@
                 <!-- Geschiedenis -->
                 <div id="content-geschiedenis" class="hidden">
                     <div class="section-card">
-                        <div class="section-title gs-title">§1.1 Rijken rond de Middellandse Zee</div>
+                        <div class="section-title gs-title">§1.1 t/m §1.3 Handelsrijken, Ontdekkers & Amerika</div>
                         <div class="qa-item">
                             <div class="qa-header">
                                 <span class="qa-question">Venetië en Genua</span>
@@ -198,42 +196,67 @@
                                     <button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button>
                                 </div>
                             </div>
-                            <div class="answer-box">Machtige Italiaanse handelssteden die rijk werden door de tussenhandel in oosterse luxeartikelen (specerijen, zijde) via de Middellandse Zee.</div>
+                            <div class="answer-box">Machtige Italiaanse handelssteden met een monopolie op de tussenhandel in oosterse luxegoederen (specerijen, zijde).</div>
                         </div>
                         <div class="qa-item">
                             <div class="qa-header">
-                                <span class="qa-question">Ottomaanse Rijk (Osmaanse Rijk)</span>
-                                <div class="qa-actions">
-                                    <button class="btn-mini" onclick="speakText('Ottomaanse Rijk: Turks moslimrijk dat in 1453 Constantinopel innam.')">🔊</button>
-                                    <button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button>
-                                </div>
+                                <span class="qa-question">Ottomaanse Rijk & 1453</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
                             </div>
-                            <div class="answer-box">Turks-islamitisch rijk dat zich uitbreidde rond de Middellandse Zee en in 1453 Constantinopel veroverde, waardoor zij de handelsroutes naar Azië beheersten.</div>
+                            <div class="answer-box">Turks-islamitisch rijk dat in 1453 Constantinopel veroverde en de landroutes naar Azië afsloot voor Europeanen.</div>
                         </div>
-                    </div>
-
-                    <div class="section-card">
-                        <div class="section-title gs-title">§1.2 t/m §1.5 Ontdekkers, Amerika & Handel</div>
                         <div class="qa-item">
                             <div class="qa-header">
                                 <span class="qa-question">Songhairijk & Timboektoe</span>
                                 <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
                             </div>
-                            <div class="answer-box">Machtig West-Afrikaans rijk rijk geworden door de trans-Saharahandel in goud, zout en slaafgemaakten.</div>
+                            <div class="answer-box">West-Afrikaans rijk rijk geworden door de trans-Saharahandel in goud, zout en slaafgemaakten.</div>
                         </div>
                         <div class="qa-item">
                             <div class="qa-header">
-                                <span class="qa-question">Vasco da Gama (1498) & Jan Huygen van Linschoten</span>
+                                <span class="qa-question">Kaap de Goede Hoop (1488)</span>
                                 <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
                             </div>
-                            <div class="answer-box">Da Gama ontdekte de zeeroute om Afrika naar Indië. Van Linschoten stal de geheime Portugese vaarroutes en schreef ze op.</div>
+                            <div class="answer-box">Zuidelijkste punt van Afrika, ontdekt door Bartolomeu Dias, waardoor de zeeroute naar Azië openlag.</div>
+                        </div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">Azteken en Inca's</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">Hoogontwikkelde inheemse beschavingen in Midden- en Zuid-Amerika met grote steden en tempels.</div>
+                        </div>
+                    </div>
+
+                    <div class="section-card">
+                        <div class="section-title gs-title">§1.4 t/m §1.5 Azië, Kolonies & Driehoekshandel</div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">Vasco da Gama (1498)</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">Portugese ontdekkingsreiziger die als eerste via de route om Afrika heen India (Calicut) bereikte.</div>
+                        </div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">Jan Huygen van Linschoten</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">Nederlander in Portugese dienst die geheime vaarroutes stal en opschreef, zodat Nederlanders ook naar Azië konden varen.</div>
+                        </div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">Trans-Atlantische Slavenhandel / Driehoekshandel</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">Handelssysteem tussen Europa (nijverheid), Afrika (slaafgemaakten) en Amerika (plantageproducten als suiker en tabak).</div>
                         </div>
                         <div class="qa-item">
                             <div class="qa-header">
                                 <span class="qa-question">Bartolomé de las Casas</span>
                                 <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
                             </div>
-                            <div class="answer-box">Spaanse priester die opkwam voor de rechten van de indianen en protesteerde tegen de wrede dwangarbeid.</div>
+                            <div class="answer-box">Spaanse priester die fel opkwam voor de rechten van de inheemse volkeren en protesteerde tegen wrede dwangarbeid.</div>
                         </div>
                     </div>
                 </div>
@@ -241,20 +264,34 @@
                 <!-- Aardrijkskunde -->
                 <div id="content-aardrijkskunde" class="hidden">
                     <div class="section-card">
-                        <div class="section-title ak-title">§1.1 t/m §1.4 Aardrijkskunde Begrippen</div>
+                        <div class="section-title ak-title">§1.1 t/m §1.4 Aardrijkskunde Stof</div>
                         <div class="qa-item">
                             <div class="qa-header">
                                 <span class="qa-question">Endogene vs. Exogene Krachten</span>
                                 <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon antwoord</button></div>
                             </div>
-                            <div class="answer-box">Endogeen = van binnenuit de aarde (platentektoniek, vulkanisme). Exogeen = van buitenaf (wind, regen, vorst, verwering).</div>
+                            <div class="answer-box">Endogeen = krachten van binnenuit de aarde (platentektoniek, aardbevingen, vulkanisme). Exogeen = krachten van buitenaf (wind, water, ijs, verwering).</div>
+                        </div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">Mechanische vs. Chemische Verwering</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon antwoord</button></div>
+                            </div>
+                            <div class="answer-box">Mechanisch: gesteente breekt zonder chemische verandering (bijv. vorstverwering). Chemisch: gesteente lost op of verandert van samenstelling door zuren en water.</div>
                         </div>
                         <div class="qa-item">
                             <div class="qa-header">
                                 <span class="qa-question">Sedimentatievolgorde van een rivier</span>
                                 <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon antwoord</button></div>
                             </div>
-                            <div class="answer-box">Van zwaar naar licht als de stroomsnelheid afneemt: 1. Grind, 2. Zand, 3. Klei.</div>
+                            <div class="answer-box">Bij afnemende stroomsnelheid zet een rivier materiaal af van zwaar naar licht: 1. Grind, 2. Zand, 3. Klei.</div>
+                        </div>
+                        <div class="qa-item">
+                            <div class="qa-header">
+                                <span class="qa-question">V-dal vs. U-dal</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon antwoord</button></div>
+                            </div>
+                            <div class="answer-box">V-dal ontstaat door uitslijping van een snelle rivier. U-dal ontstaat door de enorme uitslijpende kracht van een langzaam schurende gletsjer.</div>
                         </div>
                     </div>
                 </div>
@@ -289,7 +326,7 @@
             <div id="tab-foutentrainer" class="hidden">
                 <div class="section-card">
                     <div class="section-title gs-title">❌ Spaced-Repetition Foutentrainer</div>
-                    <p style="font-size:0.85rem; color: var(--text-muted); margin-bottom:12px;">Hier staan alle begrippen die je eerder fout hebt gemarkeerd.</p>
+                    <p style="font-size:0.85rem; color: var(--text-muted); margin-bottom:12px;">Hier staan al je gemarkeerde fouten. Oefen ze tot je ze foutloos beheerst!</p>
                     <div id="error-list"></div>
                 </div>
             </div>
@@ -297,10 +334,10 @@
             <!-- 4. OOR TRAINER TAB -->
             <div id="tab-oor" class="hidden">
                 <div class="section-card">
-                    <div class="section-title gs-title">🔗 Oorzaak & Gevolg Trainer (Dynamisch)</div>
-                    <button class="control-btn" style="background-color: var(--bg-card-hover); margin-bottom: 12px;" onclick="generateOORQuestion()">🔄 Genereer Nieuwe OOR-Vraag</button>
-                    <p id="oor-vraag" style="font-size: 0.95rem; font-weight: 600; margin-bottom: 10px;">Klik op de knop hierboven om een vraag te laden...</p>
-                    <textarea id="oor-input" rows="4" placeholder="Typ je uitgebreide antwoord in volzinnen..."></textarea>
+                    <div class="section-title gs-title">🔗 Oorzaak & Gevolg Trainer (Enorme Vragenpool)</div>
+                    <button class="control-btn" style="background-color: var(--bg-card-hover); margin-bottom: 12px;" onclick="generateOORQuestion()">🔄 Genereer Willekeurige OOR-Vraag</button>
+                    <p id="oor-vraag" style="font-size: 0.95rem; font-weight: 600; margin-bottom: 10px;">Klik op de knop om een vraag te laden...</p>
+                    <textarea id="oor-input" rows="4" placeholder="Typ je uitgebreide volzin antwoord met kernbegrippen..."></textarea>
                     <button class="control-btn primary" style="margin-top: 10px;" onclick="checkOOR()">Controleer Antwoord (+15 XP)</button>
                     <div id="oor-result" class="answer-box" style="margin-top: 12px;"></div>
                 </div>
@@ -353,31 +390,45 @@
             document.getElementById('error-count').textContent = errorCards.length;
         }
 
-        /* DATA STRUCTURE & GENERATOR POOLS */
         let activeSubject = null;
 
+        /* UITGEBREIDE FLITSKAARTEN POOL (10+ per vak) */
         const subjectData = {
             geschiedenis: {
                 title: "Geschiedenis",
                 cards: [
-                    {front: "Venetië & Genua", back: "Rijke Italiaanse handelssteden die fortuin verdienden met de tussenhandel."},
-                    {front: "Ottomaanse Rijk", back: "Turks moslimrijk dat na de inname van Constantinopel (1453) handelsroutes beheerste."},
-                    {front: "Vasco da Gama", back: "Portugese ontdekkingsreiziger die in 1498 als eerste om Afrika heen naar India voer."},
-                    {front: "Conquistadores", back: "Spaanse veroveraars (zoals Cortés) die inheemse rijken onderwierpen."},
-                    {front: "Bartolomé de las Casas", back: "Spaanse priester die opkwam voor de rechten van de inheemse Amerikanen."}
+                    {front: "Venetië & Genua", back: "Italiaanse handelssteden met een monopolie op de tussenhandel in oosterse luxegoederen."},
+                    {front: "Ottomaanse Rijk", back: "Turks moslimrijk dat in 1453 Constantinopel innam en de landroutes afsloot."},
+                    {front: "Handelsmonopolie", back: "Het alleenrecht om in een bepaald gebied of product te handelen."},
+                    {front: "Songhairijk", back: "Machtig West-Afrikaans rijk met Timboektoe, rijk door trans-Saharahandel in goud en zout."},
+                    {front: "Factorij", back: "Een versterkte Europese handelspost aan een vreemde kust voor opslag en ruilhandel."},
+                    {front: "Kaap de Goede Hoop", back: "Zuidelijkste punt van Afrika, in 1488 ontdekt door Bartolomeu Dias."},
+                    {front: "Azteken en Inca's", back: "Hoogontwikkelde inheemse rijken in Midden- en Zuid-Amerika vóór de Spaanse komst."},
+                    {front: "Conquistadores", back: "Spaanse veroveraars (Cortés, Pizarro) die inheemse rijken onderwierpen."},
+                    {front: "Vasco da Gama", back: "Portugese ontdekkingsreiziger die in 1498 als eerste om Afrika naar India voer."},
+                    {front: "Jan Huygen van Linschoten", back: "Nederlander die geheime Portugese vaarroutes stal en opschreef."},
+                    {front: "Driehoekshandel", back: "Trans-Atlantische slavenhandel tussen Europa, Afrika en Amerika."},
+                    {front: "Bartolomé de las Casas", back: "Spaanse priester die opkwam voor de rechten van de inheemse indianen."}
                 ]
             },
             aardrijkskunde: {
                 title: "Aardrijkskunde",
                 cards: [
-                    {front: "Endogene krachten", back: "Krachten vanuit het binnenste van de aarde (platentektoniek)."},
-                    {front: "Exogene krachten", back: "Krachten van buitenaf op de aardkorst (wind, vorst, regen, verwering)."},
-                    {front: "Sedimentatievolgorde", back: "Afzetting van een rivier: van zwaar naar licht (Grind -> Zand -> Klei)."}
+                    {front: "Endogene krachten", back: "Krachten van binnenuit de aarde (platentektoniek, vulkanisme, aardbevingen)."},
+                    {front: "Exogene krachten", back: "Krachten van buitenaf op de aardkorst (wind, water, ijs, verwering)."},
+                    {front: "Mechanische verwering", back: "Gesteente verbrokkelt zonder chemische verandering (bijv. vorstverwering)."},
+                    {front: "Chemische verwering", back: "Gesteente lost op of verandert van samenstelling door zuur water."},
+                    {front: "Massabewegingen", back: "Het naar beneden glijden van puin of modder langs een helling (aardverschuiving)."},
+                    {front: "Sedimentatie", back: "Het neerleggen van sediment wanneer de stroomsnelheid van water of wind afneemt."},
+                    {front: "Sedimentatievolgorde rivier", back: "Van zwaar naar licht bij afnemende stroomsnelheid: 1. Grind, 2. Zand, 3. Klei."},
+                    {front: "V-dal", back: "Een dal in de vorm van een V, uitgesleten door een snelle rivier."},
+                    {front: "U-dal", back: "Een dal in de vorm van een U, uitgesleten door een schurende gletsjer."},
+                    {front: "Delta vs. Estuarium", back: "Delta: vertakte riviermonding bij rustige zee. Estuarium: trechtervorm bij getij (eb/vloed)."}
                 ]
             }
         };
 
-        // Dynamische OOR Vragenpool
+        /* UITGEBREIDE OOR-VRAGENPOOL */
         const oorQuestionPool = {
             geschiedenis: [
                 {
@@ -387,34 +438,55 @@
                 },
                 {
                     q: "Leg uit hoe de komst van de Spaanse conquistadores leidde tot een enorme afname van de inheemse bevolking in Amerika.",
-                    keywords: ['ziektes', 'pokken', 'afweer', 'wapens', 'dwangarbeid'],
+                    keywords: ['ziektes', 'pokken', 'afweer', 'wapens', 'dwangarbeid', 'encomienda'],
                     explanation: "Naast wapens brachten Spanjaarden dodelijke Europese ziektes (pokken) mee waar de indianen geen afweer tegen hadden."
+                },
+                {
+                    q: "Leg uit waarom de reis van Jan Huygen van Linschoten zo belangrijk was voor de Nederlandse Republiek.",
+                    keywords: ['portugese', 'dienst', 'geheime', 'vaarroutes', 'opschrijven', 'reizen', 'indie'],
+                    explanation: "Van Linschoten stal de geheime Portugese zeekaarten en vaarroutes, waardoor Nederlandse kooplieden zelf naar Azië konden varen en handel konden opstarten."
+                },
+                {
+                    q: "Leg de werking en het doel van de Trans-Atlantische Driehoekshandel uit.",
+                    keywords: ['europa', 'afrika', 'amerika', 'nijverheid', 'slaafgemaakten', 'plantages', 'suiker'],
+                    explanation: "Schepen voeren met nijverheidsproducten naar Afrika voor slaafgemaakten, brachten hen naar Amerika voor dwangarbeid op plantages, en namen grondstoffen mee terug naar Europa."
                 }
             ],
             aardrijkskunde: [
                 {
-                    q: "Leg uit hoe de stroomsnelheid van een rivier beïnvloedt welk materiaal (grind, zand, klei) waar wordt gesedimenteerd.",
+                    q: "Leg uit hoe de stroomsnelheid van een rivier in een landschap bepaalt welk type sediment (grind, zand, klei) wordt afgezet.",
                     keywords: ['stroomsnelheid', 'zwaar', 'grind', 'licht', 'klei', 'afnemen', 'monding'],
-                    explanation: "In de bovenloop stroomt de rivier snel en neemt grind mee. Bij afnemende snelheid zakt eerst grind, dan zand en pas bij de monding klei."
+                    explanation: "In de snelle bovenloop kan de rivier zwaar grind meenemen. Zodra de stroomsnelheid afneemt, zakt eerst grind, dan zand en pas bij de rustige monding de lichte klei."
                 },
                 {
-                    q: "Wat is het verschil in werking tussen mechanische vorstverwering en chemische verwering?",
-                    keywords: ['spleten', 'water', 'bevriezen', 'uitzetten', 'oplossen', 'zuur', 'gesteente'],
-                    explanation: "Vorstverwering breekt steen doordat water uitzet in spleten. Chemische verwering lost het gesteente op door inwerking van water en zuren."
+                    q: "Leg uit hoe vorstverwering (een vorm van mechanische verwering) in de bergen gesteente kapotmaakt.",
+                    keywords: ['spleten', 'water', 'bevriezen', 'uitzetten', 'druk', 'verbrokkelen'],
+                    explanation: "Water sijpelt in scheuren van de rotsen. Als dit water bevriest, zet het uit en oefent enorme druk uit, waardoor de rots na verloop van tijd openbarst."
+                },
+                {
+                    q: "Wat is het fundamentele verschil in ontstaanswijze tussen een V-dal en een U-dal?",
+                    keywords: ['v-dal', 'rivier', 'erosie', 'u-dal', 'gletsjer', 'ijs', 'schuren'],
+                    explanation: "Een V-dal wordt uitgesleten door de neerwaartse erosie van een stromende rivier. Een U-dal wordt uitgesleten door een dikke, zware gletsjer die de hele vallei uitschuurt."
                 }
             ]
         };
 
-        // Dynamische Proefwerk Vragenpool
+        /* UITGEBREIDE PROEFWERK VRAGENPOOL */
         const quizGeneratorPool = {
             geschiedenis: [
-                { q: "Welke Italiaanse steden hadden een monopolie op de tussenhandel in oosterse goederen?", opts: ["Rome en Napels", "Venetië en Genua", "Florence en Milaan", "Madrid en Lissabon"], correct: 1 },
-                { q: "In welk jaar werd Constantinopel veroverd door het Ottomaanse Rijk?", opts: ["1492", "1488", "1453", "1595"], correct: 2 },
-                { q: "Wie was de Spaanse priester die opkwam voor de rechten van de indianen?", opts: ["Hernán Cortés", "Jan Huygen van Linschoten", "Bartolomé de las Casas", "Bartolomeu Dias"], correct: 1 }
+                { q: "Welke twee Italiaanse steden hadden in de middeleeuwen een monopolie op de oosterse tussenhandel?", opts: ["Rome en Napels", "Venetië en Genua", "Florence en Milaan", "Madrid en Lissabon"], correct: 1 },
+                { q: "In welk jaar veroverde het Ottomaanse Rijk de stad Constantinopel?", opts: ["1492", "1488", "1453", "1595"], correct: 2 },
+                { q: "Welke ontdekkingsreiziger bereikte in 1498 als eerste India via Kaap de Goede Hoop?", opts: ["Cristoffel Columbus", "Vasco da Gama", "Bartolomeu Dias", "Hernán Cortés"], correct: 1 },
+                { q: "Hoe heette het machtige West-Afrikaanse handelsrijk dat bekend stond om Timboektoe en de goudhandel?", opts: ["Het Incarijk", "Het Songhairijk", "Het Ottomaanse Rijk", "Het Aztekenrijk"], correct: 1 },
+                { q: "Wie was de Spaanse priester die fel opkwam voor de rechten van de oorspronkelijke bevolking in Amerika?", opts: ["Francisco Pizarro", "Jan Huygen van Linschoten", "Bartolomé de las Casas", "Sunni Ali"], correct: 1 },
+                { q: "Wat wordt bedoeld met een handelsmonopolie?", opts: ["Vrij handelen voor iedereen", "Het alleenrecht om in een bepaald product of gebied te handelen", "Handelen via ruilhandel zonder geld", "Handel uitsluitend over land"], correct: 1 }
             ],
             aardrijkskunde: [
-                { q: "Welke krachten op de aarde ontstaan vanuit het binnenste van de aardkorst?", opts: ["Exogene krachten", "Endogene krachten", "Verweringskrachten", "Sedimentatiekrachten"], correct: 1 },
-                { q: "In welke volgorde zet een rivier materiaal af bij afnemende stroomsnelheid?", opts: ["Klei -> Zand -> Grind", "Grind -> Zand -> Klei", "Zand -> Grind -> Klei", "Grind -> Klei -> Zand"], correct: 1 }
+                { q: "Hoe noemen we gebergtevormende krachten die vanuit het binnenste van de aarde werken?", opts: ["Exogene krachten", "Endogene krachten", "Verweringskrachten", "Sedimentatiekrachten"], correct: 1 },
+                { q: "Wat is een typisch kenmerk van chemische verwering?", opts: ["Gesteente zet uit door zonnehitte", "Gesteente barst open door bevriezend water", "Gesteente lost op van samenstelling door inwerking van water en zuren", "Gesteente schuurt weg door harde wind met zand"], correct: 2 },
+                { q: "In welke vaste volgorde zet een rivier haar sediment af bij afnemende stroomsnelheid?", opts: ["Klei -> Zand -> Grind", "Grind -> Zand -> Klei", "Zand -> Grind -> Klei", "Grind -> Klei -> Zand"], correct: 1 },
+                { q: "Door welke landvormende kracht ontstaat een typisch U-vormig dal?", opts: ["Een snelle bergrivier", "Een zware schurende gletsjer", "Chemische verwering door zure regen", "Hevige wind en zandstormen"], correct: 1 },
+                { q: "Wat is het verschil tussen een delta en een estuarium?", opts: ["Er is geen verschil", "Een delta vertakt bij een rustige zee; een estuarium is een trechtervorm bij sterke getijden", "Een estuarium ontstaat alleen door ijs", "Een delta ligt in de bergen"], correct: 1 }
             ]
         };
 
@@ -510,7 +582,7 @@
             const list = document.getElementById('error-list');
             document.getElementById('error-count').textContent = errorCards.length;
             if (errorCards.length === 0) {
-                list.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">Geen fouten opgeslagen! Goed bezig! 🎉</p>';
+                list.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">Geen fouten opgeslagen! Top gedaan! 🎉</p>';
                 return;
             }
             list.innerHTML = '';
