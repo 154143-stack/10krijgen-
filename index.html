@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="nl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10krijgen- | 2 VWO Studieportaal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+    .tab-active {
+      color: #818cf8 !important;
+      border-bottom: 2px solid #6366f1 !important;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen selection:bg-brand-500 selection:text-white pb-20">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center shadow-lg shadow-brand-500/20 text-white font-black text-lg">
+          10
+        </div>
+        <div>
+          <h1 class="font-bold text-sm sm:text-base text-white tracking-tight flex items-center gap-2">
+            10krijgen- <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20 hidden sm:inline-block">2 VWO Portal</span>
+          </h1>
+          <p class="text-[10px] text-slate-400">StudyGO Stijl Studieportaal</p>
+        </div>
+      </div>
+
+      <!-- Gamification & Settings -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-400 text-xs font-bold">
+          <i class="fa-solid fa-fire text-amber-500"></i>
+          <span id="streak-count">1</span> Dag Streak
+        </div>
+
+        <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs">
+          <div class="text-right hidden xs:block">
+            <div id="user-level" class="font-bold text-brand-400">Niveau 1</div>
+            <div id="user-xp" class="text-[10px] text-slate-400">0 / 100 XP</div>
+          </div>
+          <div class="w-8 h-8 rounded-lg bg-brand-600/20 border border-brand-500/30 flex items-center justify-center text-brand-400 font-bold text-xs">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+        </div>
+
+        <button onclick="toggleDataModal()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all text-xs" title="Instellingen & Data">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
+
+    <!-- VIEW 1: STUDY-GO SUBJECT SELECTOR HUB -->
+    <div id="view-hub" class="space-y-6">
+      <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+        <span class="text-xs font-bold text-brand-400 uppercase tracking-widest bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/20">Kies je vak</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">Welkom terug bij 10krijgen-!</h2>
+        <p class="text-xs sm:text-sm text-slate-300 mt-1">Selecteer hieronder het vak dat je wilt gaan oefenen voor 2 VWO.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Aardrijkskunde Card -->
+        <div onclick="selectSubject('AK')" class="bg-slate-900 border border-slate-800 hover:border-emerald-500/50 rounded-2xl p-6 shadow-xl cursor-pointer transition-all group flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-earth-europe"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Aardrijkskunde</h3>
+            <p class="text-xs font-semibold text-emerald-400">BuiteNLand • Hoofdstuk 1 (§1.1 t/m §1.4)</p>
+            <p class="text-xs text-slate-300 leading-relaxed">Gebergtevorming, mechanische & chemische verwering, massabewegingen, erosie, V/U-dalen en sedimentatie.</p>
+          </div>
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-800 text-xs text-emerald-400 font-bold">
+            <span>Start Vakoverzicht</span>
+            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+          </div>
+        </div>
+
+        <!-- Geschiedenis Card -->
+        <div onclick="selectSubject('HIS')" class="bg-slate-900 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-6 shadow-xl cursor-pointer transition-all group flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-landmark"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Geschiedenis</h3>
+            <p class="text-xs font-semibold text-amber-400">Geschiedenis Werkplaats • Hoofdstuk 1 (§1.1 t/m §1.5)</p>
+            <p class="text-xs text-slate-300 leading-relaxed">Europese overzeese expansie, Vasco da Gama, Jan Huygen van Linschoten (1595), Bartolomé de las Casas & Trans-Atlantische slavenhandel.</p>
+          </div>
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-800 text-xs text-amber-400 font-bold">
+            <span>Start Vakoverzicht</span>
+            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: SUBJECT WORKSPACE (StudyGO Style) -->
+    <div id="view-workspace" class="hidden space-y-6">
+      
+      <!-- Workspace Header -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <div class="space-y-1">
+          <button onclick="returnToHub()" class="text-xs font-bold text-brand-400 hover:text-brand-300 flex items-center gap-1.5 mb-2">
+            <i class="fa-solid fa-arrow-left"></i> Terug naar vakkenoverzicht
+          </button>
+          <h2 id="ws-title" class="text-2xl font-extrabold text-white">Aardrijkskunde VWO 2</h2>
+          <p id="ws-subtitle" class="text-xs text-slate-400">Hoofdstuk 1: Landschappen (§1.1 t/m §1.4)</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="readCurrentSummary()" class="px-3 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-semibold shadow-lg flex items-center gap-2">
+            <i class="fa-solid fa-volume-high"></i> Voorlezen
+          </button>
+          <button onclick="stopTTS()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs" title="Stop">
+            <i class="fa-solid fa-square"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabs Navigation -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-800 text-xs sm:text-sm font-semibold text-slate-400">
+        <button onclick="switchTab('samenvatting')" id="tab-samenvatting" class="tab-btn tab-active pb-2.5 px-3 flex items-center gap-2 whitespace-nowrap transition-all">
+          <i class="fa-solid fa-book-open"></i> Samenvatting
+        </button>
+        <button onclick="switchTab('flitskaarten')" id="tab-flitskaarten" class="tab-btn pb-2.5 px-3 flex items-center gap-2 whitespace-nowrap transition-all">
+          <i class="fa-solid fa-clone"></i> Flitskaarten
+        </button>
+        <button onclick="switchTab('oor')" id="tab-oor" class="tab-btn pb-2.5 px-3 flex items-center gap-2 whitespace-nowrap transition-all">
+          <i class="fa-solid fa-brain"></i> OOR & Proces Trainer
+        </button>
+        <button onclick="switchTab('fouten')" id="tab-fouten" class="tab-btn pb-2.5 px-3 flex items-center gap-2 whitespace-nowrap transition-all">
+          <i class="fa-solid fa-bullseye"></i> Fouten-Trainer <span id="fouten-badge" class="px-1.5 py-0.5 bg-rose-500 text-white rounded-full text-[10px] hidden">0</span>
+        </button>
+        <button onclick="switchTab('proefwerk')" id="tab-proefwerk" class="tab-btn pb-2.5 px-3 flex items-center gap-2 whitespace-nowrap transition-all">
+          <i class="fa-solid fa-file-pen"></i> Proefwerk-Simulatie
+        </button>
+      </div>
+
+      <!-- TAB 1: SAMENVATTING -->
+      <section id="sec-samenvatting" class="tab-content space-y-6">
+        <div id="samenvatting-content" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+      </section>
+
+      <!-- TAB 2: FLITSKAARTEN -->
+      <section id="sec-flitskaarten" class="tab-content hidden space-y-6">
+        <div class="max-w-xl mx-auto flex flex-col items-center">
+          <div class="w-full flex items-center justify-between mb-4 bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs text-slate-400">
+            <span id="flashcard-counter">Kaart 1 van 10</span>
+            <div class="flex gap-2">
+              <button onclick="shuffleFlashcards()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-200">
+                <i class="fa-solid fa-shuffle mr-1"></i> Husselen
+              </button>
+              <button onclick="resetFlashcards()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-200">
+                <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+              </button>
+            </div>
+          </div>
+
+          <div id="flashcard" onclick="flipCard()" class="perspective-1000 w-full h-80 cursor-pointer group">
+            <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d transition-transform shadow-2xl rounded-2xl">
+              <div class="absolute w-full h-full backface-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-2 border-brand-500/40 rounded-2xl p-6 flex flex-col justify-between items-center text-center">
+                <span class="text-xs font-bold text-brand-400 tracking-wider uppercase bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/20">BEGRIP</span>
+                <div class="my-auto px-4">
+                  <h3 class="text-2xl sm:text-3xl font-bold text-white mb-2" id="card-term">Term</h3>
+                  <p class="text-xs text-slate-400 mt-2">(Klik op de kaart om te draaien)</p>
+                </div>
+                <i class="fa-solid fa-rotate text-slate-500 text-sm opacity-60"></i>
+              </div>
+
+              <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-900 border-2 border-indigo-500/50 rounded-2xl p-6 flex flex-col justify-between items-center text-center">
+                <span class="text-xs font-bold text-indigo-400 tracking-wider uppercase bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">DEFINITIE & BETEKENIS</span>
+                <div class="my-auto px-4">
+                  <p class="text-base sm:text-lg text-slate-200 leading-relaxed font-medium" id="card-def">Definitie...</p>
+                  <p class="text-xs text-emerald-400 mt-3 font-mono" id="card-ex"></p>
+                </div>
+                <i class="fa-solid fa-check-circle text-emerald-500 text-sm"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between w-full mt-6 gap-3">
+            <button onclick="prevCard()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-arrow-left"></i> Vorige
+            </button>
+            <button onclick="markCardMastered()" class="px-4 py-3 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 font-semibold rounded-xl transition-all" title="Ken ik!">
+              <i class="fa-solid fa-check"></i>
+            </button>
+            <button onclick="nextCard()" class="flex-1 py-3 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+              Volgende <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: OOR & PROCES TRAINER -->
+      <section id="sec-oor" class="tab-content hidden space-y-6">
+        <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-xl max-w-3xl mx-auto">
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+            <div>
+              <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-brain text-indigo-400"></i> OOR & Proces Vragen Trainer
+              </h2>
+              <p class="text-xs text-slate-400 mt-1">Oefen open beredeneervragen met trefwoordcontrole (VWO 2 niveau)</p>
+            </div>
+            <span class="px-3 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full text-xs font-bold">Open Vragen</span>
+          </div>
+          <div id="oor-question-container" class="space-y-4"></div>
+        </div>
+      </section>
+
+      <!-- TAB 4: FOUTEN-TRAINER -->
+      <section id="sec-fouten" class="tab-content hidden space-y-6">
+        <div class="max-w-3xl mx-auto bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-xl">
+          <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
+            <div>
+              <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bullseye text-rose-400"></i> Slimme Fouten-Trainer
+              </h2>
+              <p class="text-xs text-slate-400">Vragen die je eerder fout had worden hier automatisch verzameld.</p>
+            </div>
+            <button onclick="clearFoutenLog()" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl text-xs font-semibold">
+              Wis Foutenlog
+            </button>
+          </div>
+          <div id="fouten-container" class="space-y-4"></div>
+        </div>
+      </section>
+
+      <!-- TAB 5: PROEFWERK SIMULATION -->
+      <section id="sec-proefwerk" class="tab-content hidden space-y-6">
+        <div class="max-w-3xl mx-auto bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-800 shadow-2xl">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-800">
+            <div>
+              <span class="text-xs font-bold text-amber-400 uppercase tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">2 VWO PROEFWERK SIMULATIE</span>
+              <h2 class="text-2xl font-extrabold text-white mt-2">Representatieve Toets</h2>
+              <p class="text-xs text-slate-400 mt-1">Met officiële N-term cijferberekening en timer.</p>
+            </div>
+            <div id="pw-timer-box" class="hidden flex items-center gap-3 bg-slate-950 px-4 py-2.5 rounded-xl border border-amber-500/30 text-amber-400 font-mono text-lg font-bold">
+              <i class="fa-solid fa-clock"></i>
+              <span id="pw-timer">20:00</span>
+            </div>
+          </div>
+
+          <div id="pw-start-screen" class="text-center py-8 space-y-6">
+            <div class="inline-flex p-4 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 mb-2">
+              <i class="fa-solid fa-file-pen text-4xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Klaar voor de repetitie?</h3>
+            <p class="text-sm text-slate-400 max-w-md mx-auto">De toets bestaat uit meerkeuze- en open vragen over dit vak.</p>
+            <button onclick="startProefwerk()" class="px-8 py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg transition-all">
+              <i class="fa-solid fa-play mr-2"></i> Start Proefwerk
+            </button>
+          </div>
+
+          <div id="pw-active-screen" class="hidden space-y-6">
+            <div id="pw-questions-wrapper" class="space-y-6"></div>
+            <button onclick="submitProefwerk()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl shadow-xl transition-all text-base">
+              <i class="fa-solid fa-paper-plane mr-2"></i> Lever Toets In voor Beoordeling
+            </button>
+          </div>
+
+          <div id="pw-results-screen" class="hidden space-y-6 text-center py-4">
+            <div class="p-6 bg-slate-950 rounded-2xl border border-slate-800">
+              <p class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Berekend Cijfer (VWO Norming)</p>
+              <div id="pw-grade" class="text-5xl font-extrabold text-brand-400 my-2">8.5</div>
+              <p id="pw-feedback" class="text-sm text-slate-300 mt-2 font-medium">Uitstekend gewerkt!</p>
+            </div>
+            <div id="pw-diagnostic-report" class="text-left bg-slate-800/40 p-4 rounded-xl border border-slate-700/60 text-xs space-y-2"></div>
+            <button onclick="resetProefwerk()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl transition-all">
+              <i class="fa-solid fa-rotate-right mr-2"></i> Opnieuw Proberen
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- DATA MODAL -->
+  <div id="data-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-gear text-brand-400"></i> Instellingen & Data
+        </h3>
+        <button onclick="toggleDataModal()" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-400">Exporteer je voortgang of reset je gegevens.</p>
+      <div class="space-y-3">
+        <button onclick="exportUserData()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border border-slate-700">
+          <i class="fa-solid fa-download"></i> Exporteer Voortgang (JSON)
+        </button>
+        <button onclick="resetAllProgress()" class="w-full py-2.5 bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 border border-rose-500/30 rounded-xl text-xs font-semibold flex items-center justify-center gap-2">
+          <i class="fa-solid fa-trash-can"></i> Reset Alle Voortgang
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    const CURRICULUM = {
+      AK: {
+        title: "Aardrijkskunde VWO 2",
+        chapter: "Hoofdstuk 1: Landschappen (§1.1 t/m §1.4)",
+        desc: "Plooiingsgebergten, sedimentgesteente, verwering, erosie (grind $\\rightarrow$ zand $\\rightarrow$ klei), rivierlopen en sedimentatie.",
+        summaries: [
+          {
+            section: "§1.1 Bergen groeien, bergen verdwijnen",
+            icon: "fa-mountain text-emerald-400",
+            bullets: [
+              "**Plooiingsgebergte**: Ontstaat doordat continentale platen tegen elkaar botsen, waardoor gesteentelagen worden samengedrukt en omhoog geplooid (bijv. de Alpen en de Himalaya).",
+              "**Sedimentgesteente**: Gesteente dat ontstaat uit samengeperste lagen zand, klei of kalk (bijv. zandsteen). Hierin vind je vaak fossielen.",
+              "**Jong vs. Oud Gebergte**: Jonge gebergten zijn hoog met scherpe pieken en diepe dalen. Oude gebergten zijn door erosie al langere tijd afgesleten en lager."
+            ]
+          },
+          {
+            section: "§1.2 Gesteente valt uit elkaar (Verwering)",
+            icon: "fa-cubes-stacked text-emerald-400",
+            bullets: [
+              "**Verwering**: Het afbrokkelen van gesteente onder invloed van het weer en plantenwortels. Het gesteente verplaatst hierbij nog NIET.",
+              "**Mechanische / Fysische Verwering**: Gesteente valt uit elkaar in stukken zonder dat de chemische samenstelling verandert (bijv. vorstverwering door bevriezend water in spleten, of temperatuurverschillen/insolatie).",
+              "**Chemische Verwering**: De chemische samenstelling van het gesteente verandert doordat mineralen reageren met water en zuurstof (bijv. het oplossen van kalksteen waardoor ondergrondse grotten ontstaan)."
+            ]
+          },
+          {
+            section: "§1.3 Gesteente wordt verplaatst (Erosie)",
+            icon: "fa-water text-emerald-400",
+            bullets: [
+              "**Massabeweging**: Het naar beneden glijden van los puin, modder of gesteente langs een helling onder invloed van de zwaartekracht.",
+              "**Erosie**: De schurende werking van los zand en grind dat wordt meegenomen door stromend water, ijs (gletsjers) of wind.",
+              "**Dalvorming & Sorteering**: Snelstromende rivieren slijpen diepe **V-dalen** uit; gletsjers schuren brede **U-dalen** uit. Naarmate water langzamer stroomt, zet het materiaal af in volgorde van grootte: **grind $\\rightarrow$ zand $\\rightarrow$ klei**."
+            ]
+          },
+          {
+            section: "§1.4 Gesteente wordt sediment (Sedimentatie)",
+            icon: "fa-umbrella-beach text-emerald-400",
+            bullets: [
+              "**Sedimentatie**: Het neerleggen van sediment (grind, zand, klei) wanneer de stroomsnelheid van water of de wind afneemt.",
+              "**Delta vs. Estuarium**: Bij een rustige kust vertakt een rivier zich bij de monding in een **delta**. Bij sterke getijdenwerking (eb en vloed) ontstaat een trechtervormig **estuarium**.",
+              "**Duinvorming**: De wind blaast droog strandzand op tot duinen, die door helmgras worden vastgehouden."
+            ]
+          }
+        ],
+        flashcards: [
+          { term: "Plooiingsgebergte", def: "Gebergte dat ontstaat door het samendrukken en plooien van gesteentelagen bij botsende aardplaten.", ex: "Bv. De Alpen." },
+          { term: "Sedimentgesteente", def: "Gesteente gevormd uit samengeperste lagen sediment (zand, klei of kalk).", ex: "Bv. Zandsteen." },
+          { term: "Mechanische verwering", def: "Verwering waarbij gesteente in stukken breekt zonder verandering van chemische samenstelling.", ex: "Bv. Vorstverwering." },
+          { term: "Chemische verwering", def: "Verwering waarbij de chemische samenstelling van mineralen in gesteente verandert.", ex: "Bv. Kalksteen oplossen." },
+          { term: "Massabeweging", def: "Het naar beneden glijden van puin of modder langs een helling door de zwaartekracht.", ex: "Bv. Aardverschuiving." },
+          { term: "Erosie", def: "De schurende werking van door water, ijs of wind meegenomen materiaal op het landschap.", ex: "Bv. V-dalen." },
+          { term: "Sedimentatie", def: "Het neerleggen van meegenomen sediment wanneer de stroomsnelheid afneemt.", ex: "Bv. Zandbanken en delta's." },
+          { term: "Delta", def: "Stelsel van rivieraftakkingen in zee, ontstaan door sedimentatie bij een rustige kust.", ex: "Bv. Nijldelta." },
+          { term: "Estuarium", def: "Een trechtervormige monding ontstaan door sterke getijdenwerking van eb en vloed.", ex: "Bv. Westerschelde." }
+        ],
+        oorQuestions: [
+          {
+            q: "Leg uit waarom in de bovenloop van een rivier V-dalen ontstaan en geen brede U-dalen.",
+            keywords: ["bovenloop", "stroomsnelheid", "erosie", "verticaal", "zwaartekracht"],
+            model: "In de bovenloop stroomt het water erg snel door het verval. Hierdoor snijdt de rivier met schurend grind voornamelijk verticaal naar beneden, wat een scherpe V-vorm oplevert."
+          }
+        ],
+        proefwerk: [
+          { id: 1, type: "mc", q: "Wat is de voornaamste veroorzaker van de vorming van een U-dal?", options: ["Een snelstromende rivier", "Een gletsjer (ijstong)", "Sterke zeestromingen", "Kalksteenoplossing"], ans: 1 },
+          { id: 2, type: "mc", q: "Welk gesteente ontstaat door het samendrukken van zand- of kleilagen?", options: ["Stollingsgesteente", "Sedimentgesteente", "Metamorf gesteente", "Graniet"], ans: 1 },
+          { id: 3, type: "open", q: "Omschrijf hoe vorstverwering gesteente doet afbrokkelen.", keywords: ["water", "spleten", "bevriest", "uitzetten", "barst"], model: "Water sijpelt in spleten van het gesteente. Als het vriest zet het ijs uit, waardoor de druk zo groot wordt dat de rots barst." }
+        ]
+      },
+
+      HIS: {
+        title: "Geschiedenis VWO 2",
+        chapter: "Hoofdstuk 1: Europese Overzeese Expansie (§1.1 t/m §1.5)",
+        desc: "Ontdekkingsreizen, Vasco da Gama, Jan Huygen van Linschoten (1595), Bartolomé de las Casas, Nieuwe Wetten (1542) & Trans-Atlantische slavenhandel.",
+        summaries: [
+          {
+            section: "§1.1 & §1.2 Motieven & Vroege Ontdekkingsreizen",
+            icon: "fa-compass text-amber-400",
+            bullets: [
+              "**Motieven**: Goud, God en Glorie. Handelsroutes over land werden na de val van Constantinopel (1453) afgesloten of erg duur.",
+              "**Vasco da Gama**: Bereikte in 1498 als eerste Portugees Indië via de route om Kaap de Goede Hoop.",
+              "**Columbus**: Zeilde in 1492 in Spaanse opdracht naar het westen en ontdekte Amerika."
+            ]
+          },
+          {
+            section: "§1.3 Spaanse Veroveringen",
+            icon: "fa-shield-halberd text-amber-400",
+            bullets: [
+              "**Conquistadores**: Spaanse veroveraars zoals Cortés (versloeg de Azteken in 1519) en Pizarro (versloeg de Inka's) namen inheemse rijken in.",
+              "**Oorzaak ondergang**: Superieure Spaanse wapens (staal, vuurwapens) en paarden, maar vooral dodelijke Europese ziektes (pokken) waar de inheemse bevolking geen afweer tegen had."
+            ]
+          },
+          {
+            section: "§1.4 Handel met Azië & Spionage (1595)",
+            icon: "fa-ship text-amber-400",
+            bullets: [
+              "**Jan Huygen van Linschoten**: Een Nederlandse reiziger die in Goa (India) werkte en in het geheim Portugese zeekaarten kopieerde.",
+              "**Itinerario (1596)**: Zijn publicatie gaf Nederlanders de geheime vaarroutes naar Azië, wat leidde tot de Eerste Schipvaart in 1595."
+            ]
+          },
+          {
+            section: "§1.5 Kolonisatie, Las Casas & Slavenhandel",
+            icon: "fa-chains text-amber-400",
+            bullets: [
+              "**Bartolomé de las Casas**: Een Spaanse priester die fel opkwam tegen de vreselijke mishandeling van de Indianen.",
+              "**De Nieuwe Wetten (1542)**: Keizer Karel V stelde deze wetten in om slavernij van de inheemse bevolking te verbieden.",
+              "**Zilvermijnen & Plantages**: Om economisch gewin te behalen uit de koloniën, moesten mensen werken in zilvermijnen en op plantages.",
+              "**Trans-Atlantische Slavenhandel**: Door het verbod op slavernij van Indianen gingen Europeanen Afrikanen als slaven naar Amerika halen (Driehoekshandel)."
+            ]
+          }
+        ],
+        flashcards: [
+          { term: "Vasco da Gama", def: "Portugese ontdekkingsreiziger die in 1498 als eerste via Afrika naar Indië voer.", ex: "Openingsroute specerijhandel." },
+          { term: "Jan Huygen van Linschoten", def: "Nederlander die Portugese zeekaarten stal en publiceerde in de Itinerario (1596).", ex: "Start Nederlandse vaart naar Azië." },
+          { term: "Bartolomé de las Casas", def: "Spaanse priester die opkwam voor de rechten van de inheemse bevolking in Amerika.", ex: "Zijn actie leidde tot de Nieuwe Wetten." },
+          { term: "Nieuwe Wetten (1542)", def: "Wet van Karel V die slavernij van inheemse Amerikanen verbood.", ex: "Bescherming van Indianen." },
+          { term: "Trans-Atlantische Slavenhandel", def: "De handel in tot slaaf gemaakte Afrikanen over de Atlantische Oceaan naar Amerika.", ex: "Onderdeel Driehoekshandel." }
+        ],
+        oorQuestions: [
+          {
+            q: "Leg uit hoe het protest van priester Las Casas indirect leidde tot de trans-Atlantische slavenhandel.",
+            keywords: ["Las Casas", "Nieuwe Wetten", "inheemse bevolking", "tekort", "Afrikaanse slaven"],
+            model: "Las Casas protesteerde tegen de mishandeling van de Indianen, waarna Karel V de Nieuwe Wetten (1542) instelde. Hierdoor mochten Indianen niet meer als slaaf werken, waardoor er een arbeidstekort ontstond en men Afrikaanse slaven ging importeren."
+          }
+        ],
+        proefwerk: [
+          { id: 1, type: "mc", q: "Wat was het directe gevolg van de publicatie van de Itinerario door Jan Huygen van Linschoten?", options: ["Spanje verklaarde de oorlog aan Nederland", "Nederlanders kregen geheime vaarroutes naar Indië", "De slavenhandel werd direct afgeschaft", "Columbus ontdekte Amerika"], ans: 1 },
+          { id: 2, type: "mc", q: "Welke wetgeving van Karel V in 1542 beschermde de inheemse Amerikanen?", options: ["Het Verdrag van Tordesillas", "De Nieuwe Wetten", "De Vrede van Münster", "De Pacificatie van Gent"], ans: 1 },
+          { id: 3, type: "open", q: "Waarom stierven zoveel inheemse Amerikanen na de komst van de Spanjaarden?", keywords: ["ziektes", "pokken", "immuun", "afweer"], model: "Omdat de inheemse bevolking geïsoleerd had geleefd en geen enkele immuniteit of afweer had tegen meegebrachte Europese ziektes zoals pokken." }
+        ]
+      }
+    };
+
+    let currentSubject = 'AK';
+    let currentCardIndex = 0;
+    let isCardFlipped = false;
+    let pwTimerInterval = null;
+    let pwTimeRemaining = 1200;
+
+    let userData = { xp: 10, level: 1, streak: 1, foutenLog: [] };
+
+    function loadUserData() {
+      const saved = localStorage.getItem('10krijgen_vwo2_data');
+      if (saved) { try { userData = JSON.parse(saved); } catch(e){} }
+      updateUserUI();
+    }
+    function saveUserData() {
+      localStorage.setItem('10krijgen_vwo2_data', JSON.stringify(userData));
+      updateUserUI();
+    }
+    function addXP(amount) {
+      userData.xp += amount;
+      userData.level = Math.floor(userData.xp / 100) + 1;
+      saveUserData();
+    }
+    function updateUserUI() {
+      document.getElementById('user-level').innerText = `Niveau ${userData.level}`;
+      document.getElementById('user-xp').innerText = `${userData.xp % 100} / 100 XP`;
+      document.getElementById('streak-count').innerText = userData.streak;
+      const fBadge = document.getElementById('fouten-badge');
+      if (userData.foutenLog.length > 0) {
+        fBadge.innerText = userData.foutenLog.length;
+        fBadge.classList.remove('hidden');
+      } else {
+        fBadge.classList.add('hidden');
+      }
+    }
+
+    function selectSubject(sub) {
+      currentSubject = sub;
+      const data = CURRICULUM[sub];
+      document.getElementById('view-hub').classList.add('hidden');
+      document.getElementById('view-workspace').classList.remove('hidden');
+
+      document.getElementById('ws-title').innerText = data.title;
+      document.getElementById('ws-subtitle').innerText = data.chapter;
+
+      renderSamenvatting();
+      resetFlashcards();
+      renderOOR();
+      renderFoutenLog();
+      resetProefwerk();
+      switchTab('samenvatting');
+    }
+
+    function returnToHub() {
+      document.getElementById('view-workspace').classList.add('hidden');
+      document.getElementById('view-hub').classList.remove('hidden');
+      stopTTS();
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
+      document.querySelectorAll('.tab-content').forEach(sec => sec.classList.add('hidden'));
+      document.getElementById(`tab-${tabId}`).classList.add('tab-active');
+      document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+    }
+
+    function renderSamenvatting() {
+      document.getElementById('samenvatting-content').innerHTML = CURRICULUM[currentSubject].summaries.map(s => `
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800">
+              <i class="fa-solid ${s.icon} text-xl"></i>
+              <h3 class="font-bold text-lg text-white">${s.section}</h3>
+            </div>
+            <ul class="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed">
+              ${s.bullets.map(b => `<li class="flex items-start gap-2"><span class="text-brand-500 mt-1">•</span><span>${b.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')}</span></li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderCard() {
+      const cards = CURRICULUM[currentSubject].flashcards;
+      if (!cards || cards.length === 0) return;
+      const card = cards[currentCardIndex];
+      document.getElementById('card-term').innerText = card.term;
+      document.getElementById('card-def').innerText = card.def;
+      document.getElementById('card-ex').innerText = card.ex || '';
+      document.getElementById('flashcard-counter').innerText = `Kaart ${currentCardIndex + 1} van ${cards.length}`;
+      const inner = document.getElementById('flashcard-inner');
+      if (isCardFlipped) inner.classList.add('rotate-y-180');
+      else inner.classList.remove('rotate-y-180');
+    }
+
+    function flipCard() { isCardFlipped = !isCardFlipped; renderCard(); }
+    function nextCard() { const c = CURRICULUM[currentSubject].flashcards; isCardFlipped = false; currentCardIndex = (currentCardIndex + 1) % c.length; renderCard(); }
+    function prevCard() { const c = CURRICULUM[currentSubject].flashcards; isCardFlipped = false; currentCardIndex = (currentCardIndex - 1 + c.length) % c.length; renderCard(); }
+    function shuffleFlashcards() { CURRICULUM[currentSubject].flashcards.sort(() => Math.random() - 0.5); currentCardIndex = 0; isCardFlipped = false; renderCard(); }
+    function resetFlashcards() { currentCardIndex = 0; isCardFlipped = false; renderCard(); }
+    function markCardMastered() { addXP(15); nextCard(); }
+
+    function renderOOR() {
+      document.getElementById('oor-question-container').innerHTML = CURRICULUM[currentSubject].oorQuestions.map((q, idx) => `
+        <div class="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-3">
+          <p class="text-sm font-semibold text-slate-200">Vraag ${idx + 1}: ${q.q}</p>
+          <textarea id="oor-ans-${idx}" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs sm:text-sm text-slate-100 focus:outline-none" placeholder="Typ je beredenering..."></textarea>
+          <button onclick="checkOORAnswer(${idx})" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg text-xs">Controleer</button>
+          <div id="oor-fb-${idx}" class="hidden p-3 rounded-xl text-xs space-y-1"></div>
+        </div>
+      `).join('');
+    }
+
+    function checkOORAnswer(idx) {
+      const q = CURRICULUM[currentSubject].oorQuestions[idx];
+      const userText = document.getElementById(`oor-ans-${idx}`).value.toLowerCase();
+      const fbBox = document.getElementById(`oor-fb-${idx}`);
+      let matched = 0;
+      q.keywords.forEach(kw => { if (userText.includes(kw)) matched++; });
+      fbBox.classList.remove('hidden', 'bg-emerald-950/50', 'bg-rose-950/50', 'border-emerald-500/30', 'border-rose-500/30');
+      if (matched >= 1) {
+        fbBox.classList.add('bg-emerald-950/50', 'border', 'border-emerald-500/30', 'text-emerald-300');
+        fbBox.innerHTML = `<p class="font-bold">Goed onderbouwd!</p><p class="text-slate-300 mt-1">Modelantwoord: ${q.model}</p>`;
+        addXP(25);
+      } else {
+        fbBox.classList.add('bg-rose-950/50', 'border', 'border-rose-500/30', 'text-rose-300');
+        fbBox.innerHTML = `<p class="font-bold">Onvoldoende trefwoorden.</p><p class="text-slate-300 mt-1">Modelantwoord: ${q.model}</p>`;
+        userData.foutenLog.push({ subject: currentSubject, q: q.q, model: q.model });
+        saveUserData();
+      }
+    }
+
+    function renderFoutenLog() {
+      const c = document.getElementById('fouten-container');
+      if (userData.foutenLog.length === 0) {
+        c.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs"><p>Geen openstaande fouten!</p></div>`;
+        return;
+      }
+      c.innerHTML = userData.foutenLog.map((f, i) => `
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
+          <div class="flex justify-between"><span class="text-rose-400 font-bold">${f.subject}</span><button onclick="removeFout(${i})" class="text-slate-500 hover:text-rose-400"><i class="fa-solid fa-trash"></i></button></div>
+          <p class="font-semibold text-slate-200">${f.q}</p>
+          <p class="text-slate-400 font-mono">Model: ${f.model}</p>
+        </div>
+      `).join('');
+    }
+
+    function removeFout(i) { userData.foutenLog.splice(i, 1); saveUserData(); renderFoutenLog(); }
+    function clearFoutenLog() { userData.foutenLog = []; saveUserData(); renderFoutenLog(); }
+
+    function startProefwerk() {
+      document.getElementById('pw-start-screen').classList.add('hidden');
+      document.getElementById('pw-active-screen').classList.remove('hidden');
+      document.getElementById('pw-timer-box').classList.remove('hidden');
+      const questions = CURRICULUM[currentSubject].proefwerk;
+      document.getElementById('pw-questions-wrapper').innerHTML = questions.map((q, idx) => {
+        if (q.type === 'mc') {
+          return `<div class="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-3 text-xs sm:text-sm">
+            <p class="font-bold text-slate-200">Vraag ${idx + 1}: ${q.q}</p>
+            <div class="space-y-2">${q.options.map((opt, oIdx) => `<label class="flex items-center gap-3 p-3 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer"><input type="radio" name="pw-q-${idx}" value="${oIdx}"><span class="text-slate-300">${opt}</span></label>`).join('')}</div>
+          </div>`;
+        } else {
+          return `<div class="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-3 text-xs sm:text-sm">
+            <p class="font-bold text-slate-200">Vraag ${idx + 1}: ${q.q}</p>
+            <textarea id="pw-open-${idx}" rows="3" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-slate-100" placeholder="Antwoord..."></textarea>
+          </div>`;
+        }
+      }).join('');
+      pwTimeRemaining = 1200;
+      pwTimerInterval = setInterval(() => {
+        pwTimeRemaining--;
+        let m = Math.floor(pwTimeRemaining / 60);
+        let s = pwTimeRemaining % 60;
+        document.getElementById('pw-timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+        if (pwTimeRemaining <= 0) { clearInterval(pwTimerInterval); submitProefwerk(); }
+      }, 1000);
+    }
+
+    function submitProefwerk() {
+      clearInterval(pwTimerInterval);
+      document.getElementById('pw-active-screen').classList.add('hidden');
+      document.getElementById('pw-timer-box').classList.add('hidden');
+      document.getElementById('pw-results-screen').classList.remove('hidden');
+      const questions = CURRICULUM[currentSubject].proefwerk;
+      let score = 0;
+      questions.forEach((q, idx) => {
+        if (q.type === 'mc') {
+          const sel = document.querySelector(`input[name="pw-q-${idx}"]:checked`);
+          if (sel && parseInt(sel.value) === q.ans) score++;
+        } else {
+          score++;
+        }
+      });
+      const grade = Math.min(10, Math.max(1.0, (9.0 * (score / questions.length)) + 1.0)).toFixed(1);
+      document.getElementById('pw-grade').innerText = grade;
+      document.getElementById('pw-diagnostic-report').innerHTML = `<p class="text-emerald-400">Toets ingeleverd! Score: ${score}/${questions.length}</p>`;
+      addXP(50);
+    }
+
+    function resetProefwerk() {
+      clearInterval(pwTimerInterval);
+      document.getElementById('pw-start-screen').classList.remove('hidden');
+      document.getElementById('pw-active-screen').classList.add('hidden');
+      document.getElementById('pw-results-screen').classList.add('hidden');
+      document.getElementById('pw-timer-box').classList.add('hidden');
+    }
+
+    function readCurrentSummary() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const text = CURRICULUM[currentSubject].summaries.map(s => s.section + '. ' + s.bullets.join('. ')).join('. ').replace(/\*/g, '');
+        const utt = new SpeechSynthesisUtterance(text);
+        utt.lang = 'nl-NL';
+        window.speechSynthesis.speak(utt);
+      }
+    }
+    function stopTTS() { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }
+    function toggleDataModal() { document.getElementById('data-modal').classList.toggle('hidden'); }
+    function exportUserData() {
+      const blob = new Blob([JSON.stringify(userData, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'voortgang.json'; a.click();
+    }
+    function resetAllProgress() {
+      if (confirm('Weet je zeker dat je alle data wilt wissen?')) {
+        localStorage.removeItem('10krijgen_vwo2_data');
+        userData = { xp: 0, level: 1, streak: 1, foutenLog: [] };
+        saveUserData();
+        toggleDataModal();
+      }
+    }
+
+    window.onload = function() {
+      loadUserData();
+    };
+  </script>
+</body>
+</html>
