@@ -58,7 +58,7 @@
         /* CONTAINER & NAV */
         .main-container { max-width: 900px; width: 100%; margin: 20px auto 0; padding: 0 16px; flex-grow: 1; }
         nav { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; background-color: var(--bg-card); padding: 6px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 24px; overflow-x: auto; }
-        .nav-btn { background: none; border: none; color: var(--text-muted); padding: 10px 4px; border-radius: 12px; font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; }
+        .nav-btn { background: none; border: none; color: var(--text-muted); padding: 10px 4px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; }
         .nav-btn.active { background-color: var(--accent-indigo); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
 
         /* WELKOM & VAKKEN */
@@ -129,7 +129,7 @@
         .control-btn.primary { background-color: var(--accent-indigo); border-color: var(--accent-indigo); }
         .control-btn.danger { background-color: #991b1b; border-color: #7f1d1d; }
 
-        /* OOR & PROCES TRAINER INPUTS */
+        /* TRAINER INPUTS */
         .trainer-box { background-color: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
         .trainer-label { font-size: 0.85rem; font-weight: 800; color: #818cf8; margin-bottom: 4px; display: block; }
         textarea, select, input[type="number"] { width: 100%; background-color: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; color: var(--text-main); font-size: 0.85rem; margin-top: 4px; outline: none; }
@@ -529,14 +529,14 @@
             ]
         };
 
-        /* VWO INZICHTVRAGEN / TOEPASSINGSVRAGEN (VOOR PROEFWERK) */
+        /* VWO INZICHTVRAGEN / TOEPASSINGSVRAGEN */
         const vwoApplicationQuestions = {
             aardrijkskunde: [
                 {
                     q: "In de Alpen zie je onder een steile rotswand grote hopen scherpe stenen liggen. Welk proces verklaart dit het best?",
                     opts: [
                         "Vorstverwering in combinatie met massabeweging door zwaartekracht.",
-                        "Chemische verwering door zoutzuur in de atmosfeer.",
+                        "Chemische verwering door zuur regenwater.",
                         "Sedimentatie van grind door een snelle bovenloop.",
                         "Stollingsvorming uit onderaardse magmakamers."
                     ],
@@ -582,27 +582,27 @@
             ]
         };
 
-        /* DYNAMISCHE TRAINER DATABASE (OOR VOOR GS, PROCES VOOR AK) */
+        /* TRAINER DATABASES (OOR voor GS, PROCES voor AK) */
         const trainerDatabases = {
             geschiedenis: [
                 {
                     title: "De inname van Constantinopel in 1453",
-                    l1: "Oorzaak:", p1: "Ottomaanse opmars en verovering van de stad.", k1: ['ottoman', 'constantinopel', 'veroverd'],
-                    l2: "Gebeurtenis:", p2: "Afsluiting van de oosterse landroutes voor Europese handel.", k2: ['landroutes', 'afgesloten', 'handel'],
-                    l3: "Gevolg:", p3: "Europeanen moesten nieuwe zeeroutes naar Azië ontdekken.", k3: ['zeeroute', 'azie', 'ontdekken']
+                    l1: "1. Wat was de Oorzaak?", p1: "Ottomaanse opmars en verovering van de stad.", k1: ['ottoman', 'constantinopel', 'veroverd'],
+                    l2: "2. Wat hield de Gebeurtenis in?", p2: "Afsluiting van de oosterse landroutes voor Europese handel.", k2: ['landroutes', 'afgesloten', 'handel'],
+                    l3: "3. Wat was het Gevolg?", p3: "Europeanen moesten nieuwe zeeroutes naar Azië ontdekken.", k3: ['zeeroute', 'azie', 'ontdekken']
                 }
             ],
             aardrijkskunde: [
                 {
                     title: "Het Landschapsproces van Steen tot Strand",
-                    l1: "1. Verwering:", p1: "Gesteente verbrokkelt door mechanische of chemische verwering (bijv. vorstverwering).", k1: ['verwering', 'vorst', 'verbrokkelt'],
-                    l2: "2. Transport / Erosie:", p2: "Stromend water of zwaartekracht verplaatst het materiaal via massabeweging en rivieren.", k2: ['erosie', 'zwaartekracht', 'rivier', 'transport'],
-                    l3: "3. Sedimentatie:", p3: "Materiaal bezinkt in de benedenloop of aan zee, waar zandbanken en delta's ontstaan.", k3: ['sedimentatie', 'bezinkt', 'delta', 'strand']
+                    l1: "1. Wat is de startstap (Verwering)?", p1: "Gesteente verbrokkelt door mechanische of chemische verwering (bijv. vorstverwering).", k1: ['verwering', 'vorst', 'verbrokkelt'],
+                    l2: "2. Wat is de tussenstap (Transport / Erosie)?", p2: "Stromend water of zwaartekracht verplaatst het materiaal via massabeweging en rivieren.", k2: ['erosie', 'zwaartekracht', 'rivier', 'transport'],
+                    l3: "3. Wat is de eindstap (Sedimentatie)?", p3: "Materiaal bezinkt in de benedenloop of aan zee, waar zandbanken en delta's ontstaan.", k3: ['sedimentatie', 'bezinkt', 'delta', 'strand']
                 }
             ]
         };
 
-        /* RENDER LEERSTOF & SAMENVATTING */
+        /* RENDER UI */
         function setupSubjectUI(sub) {
             activeSubject = sub;
             document.getElementById('subject-selection').classList.add('hidden');
@@ -612,15 +612,14 @@
             document.getElementById('content-geschiedenis').classList.toggle('hidden', sub !== 'geschiedenis');
             document.getElementById('content-aardrijkskunde').classList.toggle('hidden', sub !== 'aardrijkskunde');
 
-            // Vul samenvatting
             document.getElementById('summary-content-container').innerHTML = summariesData[sub];
             document.getElementById('summary-main-title').textContent = sub === 'aardrijkskunde' ? '🎧 Luister-Samenvatting (AK Hoofdstuk 1)' : '🎧 Luister-Samenvatting (GS Hoofdstuk 1)';
 
-            // Configureer Trainer tab naar OOR (Gs) of Proces (Ak)
+            // DYNAMISCHE TRAINER CONFIGURATIE (KRITIEKE FIX)
             if (sub === 'aardrijkskunde') {
                 document.getElementById('trainer-tab-title').textContent = '🏞️ Proces-Trainer';
                 document.getElementById('trainer-card-title').textContent = '🏞️ Landschap- & Procestrainer (AK)';
-                document.getElementById('trainer-subtitle').textContent = 'Geografisch Proces:';
+                document.getElementById('trainer-subtitle').textContent = 'Geografisch Proces / Stap:';
                 document.getElementById('t-lbl-1').textContent = '1. Wat is de startstap (Verwering)?';
                 document.getElementById('t-lbl-2').textContent = '2. Wat is de tussenstap (Transport / Erosie)?';
                 document.getElementById('t-lbl-3').textContent = '3. Wat is de eindstap (Sedimentatie)?';
@@ -686,7 +685,7 @@
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         }
 
-        /* TRAINER ENGINE (OOR of PROCES) */
+        /* TRAINER ENGINE */
         let activeTrainerData = null;
 
         function generateTrainerScenario() {
@@ -722,7 +721,7 @@
             }
         }
 
-        /* PROEFWERK SIMULATOR (BEGRIPPEN + VWO INZICHTVRAGEN) */
+        /* PROEFWERK SIMULATOR */
         let pwQuestions = [];
         let pwIndex = 0;
         let pwScore = 0;
@@ -736,7 +735,6 @@
             const pool = knowledgeBase[activeSubject];
             const appPool = vwoApplicationQuestions[activeSubject] || [];
 
-            // Neem 7 begripsvragen en 3 inzichtvragen
             const shuffledPool = [...pool].sort(() => Math.random() - 0.5).slice(0, 7);
             
             shuffledPool.forEach(target => {
@@ -762,7 +760,6 @@
                 });
             });
 
-            // Schud de hele toetsvolgorde
             pwQuestions = pwQuestions.sort(() => Math.random() - 0.5);
 
             document.getElementById('pw-quiz-box').classList.remove('hidden');
@@ -838,7 +835,7 @@
             }
         }
 
-        /* FOUTENTRAINER OEFEN-QUIZ */
+        /* FOUTENTRAINER */
         let currentErrorTarget = null;
         function startErrorQuiz() {
             if (errorCards.length === 0) {
