@@ -21,23 +21,18 @@
             --border-color: #334155;
         }
 
-        /* THEMAS */
-        body.theme-neon {
-            --bg-main: #030712;
-            --bg-card: #0f172a;
-            --bg-card-hover: #1e293b;
-            --accent-indigo: #06b6d4;
-            --accent-indigo-hover: #0891b2;
-            --border-color: #1e293b;
-        }
-        body.theme-gold {
-            --bg-main: #14110f;
-            --bg-card: #231f1b;
-            --bg-card-hover: #383029;
-            --accent-indigo: #d97706;
-            --accent-indigo-hover: #b45309;
-            --border-color: #383029;
-        }
+        /* 12 UNIEKE THEMA'S */
+        body.theme-neon { --bg-main: #030712; --bg-card: #0f172a; --bg-card-hover: #1e293b; --accent-indigo: #06b6d4; --border-color: #1e293b; }
+        body.theme-gold { --bg-main: #14110f; --bg-card: #231f1b; --bg-card-hover: #383029; --accent-indigo: #d97706; --border-color: #383029; }
+        body.theme-emerald { --bg-main: #022c22; --bg-card: #064e3b; --bg-card-hover: #047857; --accent-indigo: #10b981; --border-color: #065f46; }
+        body.theme-volcano { --bg-main: #180505; --bg-card: #2c0b0e; --bg-card-hover: #450a0a; --accent-indigo: #ef4444; --border-color: #7f1d1d; }
+        body.theme-violet { --bg-main: #0f0728; --bg-card: #1e1035; --bg-card-hover: #2e1065; --accent-indigo: #a855f7; --border-color: #581c87; }
+        body.theme-sakura { --bg-main: #1f0914; --bg-card: #3b0726; --bg-card-hover: #500732; --accent-indigo: #ec4899; --border-color: #831843; }
+        body.theme-vaporwave { --bg-main: #0d0221; --bg-card: #261447; --bg-card-hover: #ff3864; --accent-indigo: #ff3864; --border-color: #ff3864; }
+        body.theme-parchment { --bg-main: #1c1917; --bg-card: #292524; --bg-card-hover: #44403c; --accent-indigo: #d97706; --border-color: #78350f; }
+        body.theme-oled { --bg-main: #000000; --bg-card: #111111; --bg-card-hover: #222222; --accent-indigo: #3b82f6; --border-color: #333333; }
+        body.theme-ocean { --bg-main: #031b2e; --bg-card: #082f49; --bg-card-hover: #0c4a6e; --accent-indigo: #0ea5e9; --border-color: #0369a1; }
+        body.theme-royal { --bg-main: #13032b; --bg-card: #240046; --bg-card-hover: #3c096c; --accent-indigo: #9d4edd; --border-color: #5a189a; }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 40px; transition: background 0.3s; }
@@ -57,7 +52,7 @@
 
         /* CONTAINER & NAV */
         .main-container { max-width: 900px; width: 100%; margin: 20px auto 0; padding: 0 16px; flex-grow: 1; }
-        nav { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; background-color: var(--bg-card); padding: 6px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 24px; overflow-x: auto; }
+        nav { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; background-color: var(--bg-card); padding: 6px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 24px; overflow-x: auto; }
         .nav-btn { background: none; border: none; color: var(--text-muted); padding: 10px 4px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; text-align: center; }
         .nav-btn.active { background-color: var(--accent-indigo); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
 
@@ -84,12 +79,11 @@
         .ak .card-footer { color: var(--accent-emerald); }
         .gs .card-footer { color: var(--accent-amber); }
 
-        /* XP SHOP PANEL */
-        .shop-panel { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; margin-top: 16px; }
-        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 12px; }
-        .shop-item { background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; }
-        .shop-item h4 { font-size: 0.95rem; margin-bottom: 4px; }
-        .shop-item p { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; }
+        /* SHOP & INVENTORY GRID */
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 14px; }
+        .shop-item { background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .shop-item h4 { font-size: 1rem; margin-bottom: 4px; font-weight: 800; }
+        .shop-item p { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; }
 
         /* LEERSTOF & ZOEKBALK */
         .search-bar { width: 100%; padding: 12px 16px; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main); font-size: 0.9rem; margin-bottom: 16px; outline: none; transition: border-color 0.2s; }
@@ -109,9 +103,8 @@
         .qa-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
         .qa-question { font-weight: 700; font-size: 0.9rem; }
         .qa-actions { display: flex; gap: 6px; }
-        .btn-mini { background-color: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: #a5b4fc; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+        .btn-mini { background-color: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: #a5b4fc; padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
         .btn-mini:hover { background-color: rgba(99, 102, 241, 0.3); }
-        .answer-box { display: none; margin-top: 8px; padding: 10px; background-color: rgba(15, 23, 42, 0.9); border-left: 3px solid var(--accent-indigo); border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; }
 
         /* 3D FLITSKAARTEN */
         .flashcard-wrapper { display: flex; flex-direction: column; align-items: center; padding: 10px 0; }
@@ -145,6 +138,8 @@
         .correct-text { color: var(--accent-emerald); }
         .wrong-text { color: var(--accent-rose); }
 
+        .answer-box { display: none; margin-top: 8px; padding: 10px; background-color: rgba(15, 23, 42, 0.9); border-left: 3px solid var(--accent-indigo); border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; }
+
         .hidden { display: none !important; }
     </style>
 </head>
@@ -175,12 +170,12 @@
     <!-- Main Container -->
     <div class="main-container">
 
-        <!-- VAK SELECTIE & XP SHOP SCHERM -->
+        <!-- VAK SELECTIE SCHERM -->
         <div id="subject-selection">
             <div class="welcome-card">
-                <span class="welcome-badge">Kies je vak & thema</span>
+                <span class="welcome-badge">Kies je vak</span>
                 <h2>Welkom bij 10krijgen!</h2>
-                <p>Selecteer hieronder het vak dat je wilt gaan oefenen voor 2 VWO of personaliseer je portal in de XP Shop.</p>
+                <p>Selecteer hieronder het vak dat je wilt gaan oefenen voor 2 VWO of ga naar de XP Shop voor unieke designs!</p>
             </div>
 
             <div class="subjects-grid">
@@ -217,28 +212,7 @@
                 </div>
             </div>
 
-            <!-- XP SHOP -->
-            <div class="shop-panel">
-                <div class="section-title" style="margin-bottom:8px;">🛒 XP Shop & Thema's (Ontgrendel met XP)</div>
-                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">Geef je verzamelde XP uit aan exclusieve thema's en studiestijlen!</p>
-                <div class="shop-grid">
-                    <div class="shop-item">
-                        <h4>🌌 Cyber Neon</h4>
-                        <p>Futuristische blauw-paarse glow</p>
-                        <button class="btn-mini" onclick="setTheme('theme-neon', 50)">Ontgrendel (50 XP)</button>
-                    </div>
-                    <div class="shop-item">
-                        <h4>🏛️ Gouden Academie</h4>
-                        <p>Luxe goud-bronzen VWO stijl</p>
-                        <button class="btn-mini" onclick="setTheme('theme-gold', 100)">Ontgrendel (100 XP)</button>
-                    </div>
-                    <div class="shop-item">
-                        <h4>⚡ Standaard Modern</h4>
-                        <p>Originele 10krijgen look</p>
-                        <button class="btn-mini" onclick="setTheme('', 0)">Gratis</button>
-                    </div>
-                </div>
-            </div>
+            <button class="control-btn primary" style="width:100%; font-size:1rem; padding:14px;" onclick="openStandaloneShop()">🛍️ Open XP Design Shop & Inventaris</button>
         </div>
 
         <!-- VAK INHOUD -->
@@ -251,6 +225,7 @@
                 <button onclick="switchTab('foutentrainer')" id="btn-foutentrainer" class="nav-btn">❌ Foutentrainer (<span id="error-count">0</span>)</button>
                 <button onclick="switchTab('trainer')" id="btn-trainer" class="nav-btn"><span id="trainer-tab-title">🔗 OOR-Trainer</span></button>
                 <button onclick="switchTab('proefwerk')" id="btn-proefwerk" class="nav-btn">📝 Proefwerk</button>
+                <button onclick="switchTab('shop')" id="btn-shop" class="nav-btn">🛍️ XP Shop</button>
             </nav>
 
             <!-- 0. LUISTER-SAMENVATTING TAB -->
@@ -389,18 +364,53 @@
                 </div>
             </div>
 
+            <!-- 6. XP DESIGN SHOP & INVENTARIS TAB -->
+            <div id="tab-shop" class="hidden">
+                <!-- INVENTARIS -->
+                <div class="section-card">
+                    <div class="section-title gs-title">🎒 Mijn Inventaris (Bezit & Uitrusten)</div>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">Hier staan al jouw ontgrendelde website designs. Klik op 'Rust uit' om een thema direct toe te passen!</p>
+                    <div id="inventory-grid" class="shop-grid"></div>
+                </div>
+
+                <!-- DESIGN WINKEL -->
+                <div class="section-card">
+                    <div class="section-title ak-title">🛍️ Design Shop (12 Exclusieve Website Stijlen)</div>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">Verdien XP door flitskaarten te leren en proefwerken te maken, en ontgrendel unieke stijlen!</p>
+                    <div id="shop-catalog-grid" class="shop-grid"></div>
+                </div>
+            </div>
+
         </div>
 
     </div>
 
     <script>
-        /* RANGEN, XP & THEMA SYSTEM */
+        /* RANGEN & XP SYSTEM */
         let xp = parseInt(localStorage.getItem('10k_xp')) || 0;
         let streak = parseInt(localStorage.getItem('10k_streak')) || 1;
         let errorCards = JSON.parse(localStorage.getItem('10k_errors')) || [];
-        let currentTheme = localStorage.getItem('10k_theme') || '';
+        
+        // INVENTARIS & DESIGN DATABASE
+        let ownedThemes = JSON.parse(localStorage.getItem('10k_owned_themes')) || [''];
+        let activeTheme = localStorage.getItem('10k_active_theme') || '';
 
-        if (currentTheme) document.body.className = currentTheme;
+        if (activeTheme) document.body.className = activeTheme;
+
+        const allThemes = [
+            { id: '', name: '⚡ Standaard Modern', desc: 'Originele strakke 10krijgen look', cost: 0 },
+            { id: 'theme-neon', name: '🌌 Cyber Neon', desc: 'Futuristische blauw-paarse glow', cost: 50 },
+            { id: 'theme-gold', name: '🏛️ Gouden Academie', desc: 'Luxe goud-bronzen VWO stijl', cost: 100 },
+            { id: 'theme-emerald', name: '🌲 Emerald Bos', desc: 'Rustgevende diepgroene natuurstijl', cost: 75 },
+            { id: 'theme-volcano', name: '🌋 Vulkanisch Rood', desc: 'Vurig rode intensieve studiemodus', cost: 85 },
+            { id: 'theme-violet', name: '🔮 Deep Violet', desc: 'Mystieke paarse cyberpunk uitstraling', cost: 90 },
+            { id: 'theme-sakura', name: '🌸 Sakura Pink', desc: 'Japanse kersenbloesem roze stijl', cost: 110 },
+            { id: 'theme-vaporwave', name: '🌇 Sunset Vaporwave', desc: 'Retro 80s neon & roze vibes', cost: 120 },
+            { id: 'theme-parchment', name: '📜 Perkament Klassiek', desc: 'Historische bruine perkamentstijl', cost: 130 },
+            { id: 'theme-oled', name: '🌃 Midnight OLED', desc: 'Extreem donker oled-zwart design', cost: 150 },
+            { id: 'theme-ocean', name: '🌊 Oceaan Diepblauw', desc: 'Rustgevende diepblauwe oceaanlook', cost: 80 },
+            { id: 'theme-royal', name: '👑 Koninklijk Purper', desc: 'Koninklijke purpere keizerstijl', cost: 200 }
+        ];
 
         const ranks = ["Rekruut", "Schildknaap", "Verkenner", "Geleerde", "Meester", "Grootmeester", "Legende", "Koning van de 10", "Keizer", "Onverslaanbaar"];
 
@@ -416,16 +426,67 @@
             document.getElementById('error-count').textContent = errorCards.length;
         }
 
-        function setTheme(themeName, cost) {
-            if (cost > 0 && xp < cost) {
+        /* SHOP & INVENTORY ENGINE */
+        function renderShopUI() {
+            const invGrid = document.getElementById('inventory-grid');
+            const shopGrid = document.getElementById('shop-catalog-grid');
+            invGrid.innerHTML = '';
+            shopGrid.innerHTML = '';
+
+            allThemes.forEach(theme => {
+                const isOwned = ownedThemes.includes(theme.id);
+                const isActive = activeTheme === theme.id;
+
+                if (isOwned) {
+                    invGrid.innerHTML += `
+                        <div class="shop-item" style="border-color: ${isActive ? 'var(--accent-emerald)' : 'var(--border-color)'};">
+                            <div>
+                                <h4>${theme.name}</h4>
+                                <p>${theme.desc}</p>
+                            </div>
+                            <button class="btn-mini" style="background-color:${isActive ? 'var(--accent-emerald)' : 'var(--accent-indigo)'}; color:white;" onclick="equipTheme('${theme.id}')">
+                                ${isActive ? '✅ Uitgerust' : '⚙️ Rust uit'}
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    shopGrid.innerHTML += `
+                        <div class="shop-item">
+                            <div>
+                                <h4>${theme.name}</h4>
+                                <p>${theme.desc}</p>
+                            </div>
+                            <button class="btn-mini" onclick="buyTheme('${theme.id}', ${theme.cost})">
+                                🛒 Koop voor ${theme.cost} XP
+                            </button>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function buyTheme(themeId, cost) {
+            if (xp < cost) {
                 alert(`Je hebt nog niet genoeg XP! Je hebt ${cost} XP nodig (je hebt nu ${xp} XP).`);
                 return;
             }
-            if (cost > 0) updateXP(-cost);
-            currentTheme = themeName;
-            document.body.className = themeName;
-            localStorage.setItem('10k_theme', themeName);
-            alert("Thema succesvol ingesteld!");
+            updateXP(-cost);
+            ownedThemes.push(themeId);
+            localStorage.setItem('10k_owned_themes', JSON.stringify(ownedThemes));
+            equipTheme(themeId);
+            alert("Gefeliciteerd! Je hebt het nieuwe design gekocht en direct toegepast! 🎉");
+        }
+
+        function equipTheme(themeId) {
+            activeTheme = themeId;
+            document.body.className = themeId;
+            localStorage.setItem('10k_active_theme', themeId);
+            renderShopUI();
+        }
+
+        function openStandaloneShop() {
+            selectSubject('aardrijkskunde');
+            switchTab('shop');
         }
 
         let activeSubject = null;
@@ -570,7 +631,7 @@
                     correct: 0
                 },
                 {
-                    q: "Wat hield de Trans-Atlantische driehoekshandel hoofdzakelijk in?",
+                    q: "Wat hield de Trans-Atlantische driehoekshandel hoofdjelijk in?",
                     opts: [
                         "Ruilhandel in graan tussen Venetië, Genua en Constantinopel.",
                         "Verscheping van Europese nijverheidsproducten naar Afrika, slaafgemaakten naar Amerika, en plantageproducten terug naar Europa.",
@@ -637,6 +698,7 @@
             generateTrainerScenario();
             startDynamicProefwerk();
             renderErrorCards();
+            renderShopUI();
             switchTab('samenvatting');
         }
 
@@ -684,7 +746,7 @@
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         }
 
-        /* TRAINER ENGINE (MET GLITCH FIX: HAS EARNED XP VLAG) */
+        /* TRAINER ENGINE */
         let activeTrainerData = null;
         let hasEarnedXPForCurrentScenario = false;
 
@@ -699,7 +761,6 @@
             document.getElementById('t-ans-3').value = '';
             document.getElementById('trainer-result').style.display = 'none';
 
-            // Reset vlag voor nieuwe casus
             hasEarnedXPForCurrentScenario = false;
         }
 
@@ -725,7 +786,6 @@
                 earnedThisTurn = 10;
             }
 
-            // XP slechts EENMAAL toekennen per casus (GLITCH FIX)
             if (!hasEarnedXPForCurrentScenario) {
                 updateXP(earnedThisTurn);
                 hasEarnedXPForCurrentScenario = true;
@@ -902,12 +962,13 @@
         }
         function switchTab(tab) {
             stopSpeech();
-            ['samenvatting', 'leerstof', 'flitskaarten', 'foutentrainer', 'trainer', 'proefwerk'].forEach(t => {
+            ['samenvatting', 'leerstof', 'flitskaarten', 'foutentrainer', 'trainer', 'proefwerk', 'shop'].forEach(t => {
                 document.getElementById('tab-' + t).classList.add('hidden');
                 document.getElementById('btn-' + t).classList.remove('active');
             });
             document.getElementById('tab-' + tab).classList.remove('hidden');
             document.getElementById('btn-' + tab).classList.add('active');
+            if (tab === 'shop') renderShopUI();
         }
         function filterLeerstof() {
             const q = document.getElementById('live-search').value.toLowerCase();
@@ -985,7 +1046,7 @@
             updateXP(10);
         }
         function exportData() {
-            const blob = new Blob([JSON.stringify({ xp, streak, errorCards, currentTheme })], { type: 'application/json' });
+            const blob = new Blob([JSON.stringify({ xp, streak, errorCards, ownedThemes, activeTheme })], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = '10krijgen_voortgang.json';
@@ -997,8 +1058,12 @@
                 try {
                     const d = JSON.parse(str);
                     xp = d.xp || 0; streak = d.streak || 1; errorCards = d.errorCards || [];
+                    ownedThemes = d.ownedThemes || ['']; activeTheme = d.activeTheme || '';
                     localStorage.setItem('10k_xp', xp);
                     localStorage.setItem('10k_errors', JSON.stringify(errorCards));
+                    localStorage.setItem('10k_owned_themes', JSON.stringify(ownedThemes));
+                    localStorage.setItem('10k_active_theme', activeTheme);
+                    document.body.className = activeTheme;
                     updateXP(0);
                     alert("Geladen!");
                 } catch(e) { alert("Fout!"); }
@@ -1007,7 +1072,7 @@
         function resetData() {
             if (confirm("Alles wissen?")) {
                 localStorage.clear();
-                xp = 0; streak = 1; errorCards = []; currentTheme = '';
+                xp = 0; streak = 1; errorCards = []; ownedThemes = ['']; activeTheme = '';
                 document.body.className = '';
                 updateXP(0);
                 alert("Gereset!");
