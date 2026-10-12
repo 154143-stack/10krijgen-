@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Krijgen - 2 VWO Studieportaal</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --accent-indigo: #6366f1;
+            --accent-indigo-hover: #4f46e5;
+            --accent-amber: #f59e0b;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 40px; }
+
+        /* HEADER */
+        header { background-color: rgba(30, 41, 59, 0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 50; padding: 12px 20px; }
+        .header-container { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .logo-group { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+        .logo-text h1 { font-size: 1.3rem; font-weight: 900; background: linear-gradient(to right, #818cf8, #c084fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-text p { font-size: 0.75rem; color: var(--text-muted); }
+
+        .header-stats { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .pill { background-color: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); padding: 5px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .action-btn { background-color: var(--bg-card-hover); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .action-btn:hover { background-color: #475569; }
+
+        /* CONTAINER & NAV */
+        .main-container { max-width: 900px; width: 100%; margin: 20px auto 0; padding: 0 16px; flex-grow: 1; }
+        nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; background-color: var(--bg-card); padding: 6px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 24px; overflow-x: auto; }
+        .nav-btn { background: none; border: none; color: var(--text-muted); padding: 10px 4px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+        .nav-btn.active { background-color: var(--accent-indigo); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+
+        /* WELKOM & VAKKEN */
+        .welcome-card { background: linear-gradient(135deg, #1e293b, #1e1b4b); border: 1px solid var(--border-color); border-radius: 24px; padding: 24px; margin-bottom: 20px; }
+        .welcome-badge { font-size: 0.7rem; font-weight: 900; letter-spacing: 1px; color: #818cf8; text-transform: uppercase; background-color: rgba(49, 46, 129, 0.8); border: 1px solid rgba(99, 102, 241, 0.4); padding: 4px 12px; border-radius: 999px; display: inline-block; margin-bottom: 10px; }
+        .welcome-card h2 { font-size: 1.5rem; font-weight: 900; margin-bottom: 6px; }
+        .welcome-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .subject-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; }
+        .subject-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.3); }
+        .subject-card.ak:hover { border-color: var(--accent-emerald); }
+        .subject-card.gs:hover { border-color: var(--accent-amber); }
+        .card-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 12px; }
+        .ak .card-icon { background-color: rgba(6, 78, 59, 0.6); border: 1px solid rgba(16, 185, 129, 0.4); }
+        .gs .card-icon { background-color: rgba(120, 53, 15, 0.6); border: 1px solid rgba(245, 158, 11, 0.4); }
+        .subject-card h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
+        .subject-subtitle { font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; }
+        .ak .subject-subtitle { color: var(--accent-emerald); }
+        .gs .subject-subtitle { color: var(--accent-amber); }
+        .subject-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 20px; }
+        .card-footer { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; }
+        .ak .card-footer { color: var(--accent-emerald); }
+        .gs .card-footer { color: var(--accent-amber); }
+
+        /* LEERSTOF & ZOEKBALK */
+        .search-bar { width: 100%; padding: 12px 16px; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main); font-size: 0.9rem; margin-bottom: 16px; outline: none; transition: border-color 0.2s; }
+        .search-bar:focus { border-color: var(--accent-indigo); }
+        .section-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; margin-bottom: 16px; }
+        .section-title { font-size: 1.05rem; font-weight: 800; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); margin-bottom: 14px; }
+        .gs-title { color: var(--accent-amber); }
+        .ak-title { color: var(--accent-emerald); }
+
+        .qa-item { background-color: rgba(15, 23, 42, 0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; margin-bottom: 10px; transition: transform 0.2s; }
+        .qa-item:hover { border-color: rgba(99, 102, 241, 0.3); }
+        .qa-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .qa-question { font-weight: 700; font-size: 0.9rem; }
+        .qa-actions { display: flex; gap: 6px; }
+        .btn-mini { background-color: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: #a5b4fc; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+        .btn-mini:hover { background-color: rgba(99, 102, 241, 0.3); }
+        .answer-box { display: none; margin-top: 8px; padding: 10px; background-color: rgba(15, 23, 42, 0.9); border-left: 3px solid var(--accent-indigo); border-radius: 0 8px 8px 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; }
+
+        /* 3D FLITSKAARTEN */
+        .flashcard-wrapper { display: flex; flex-direction: column; align-items: center; padding: 10px 0; }
+        .perspective-container { perspective: 1000px; width: 100%; max-width: 420px; height: 260px; cursor: pointer; }
+        .flashcard-3d { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+        .flashcard-3d.flipped { transform: rotateY(180deg); }
+        .card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--border-color); }
+        .card-front { background: linear-gradient(135deg, #1e293b, #0f172a); }
+        .card-back { background: linear-gradient(135deg, #312e81, #1e1b4b); border-color: #6366f1; transform: rotateY(180deg); }
+        .card-tag { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: #818cf8; }
+        .card-body-text { font-size: 1.1rem; font-weight: 800; text-align: center; line-height: 1.4; }
+
+        .controls-row { display: flex; gap: 10px; width: 100%; max-width: 420px; margin-top: 16px; }
+        .control-btn { flex: 1; padding: 10px; border-radius: 12px; border: 1px solid var(--border-color); background-color: var(--bg-card); color: var(--text-main); font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+        .control-btn.primary { background-color: var(--accent-indigo); border-color: var(--accent-indigo); }
+        .control-btn.danger { background-color: #991b1b; border-color: #7f1d1d; }
+
+        /* OOR & PROEFWERK INPUTS */
+        .oor-box { background-color: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+        .oor-label { font-size: 0.85rem; font-weight: 800; color: #818cf8; margin-bottom: 4px; display: block; }
+        textarea, select, input[type="number"] { width: 100%; background-color: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; color: var(--text-main); font-size: 0.85rem; margin-top: 4px; outline: none; }
+        textarea:focus, input:focus { border-color: var(--accent-indigo); }
+        .opt-btn { width: 100%; text-align: left; padding: 12px; background-color: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 0.85rem; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; }
+        .opt-btn:hover { border-color: var(--accent-indigo); background-color: rgba(99, 102, 241, 0.1); }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo-group" onclick="showSubjectSelection()">
+                <div class="logo-icon">10</div>
+                <div class="logo-text">
+                    <h1>10 KRIJGEN</h1>
+                    <p>2 VWO Studieportaal</p>
+                </div>
+            </div>
+
+            <div class="header-stats">
+                <button id="change-subject-btn" class="action-btn hidden" onclick="showSubjectSelection()">🔄 Wissel Vak</button>
+                <div class="pill">🔥 <strong id="streak-counter">1</strong> Dagen</div>
+                <div class="pill">⚡ <strong id="xp-counter">0</strong> XP <span style="color: #818cf8; margin-left:2px;" id="level-badge">Lvl 1 - Rekruut</span></div>
+                <button class="action-btn" onclick="exportData()" title="Exporteer Voortgang">💾</button>
+                <button class="action-btn" onclick="importData()" title="Importeer Voortgang">📥</button>
+                <button class="action-btn" onclick="resetData()" title="Reset Alles">🗑️</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+
+        <!-- VAK SELECTIE SCHERM -->
+        <div id="subject-selection">
+            <div class="welcome-card">
+                <span class="welcome-badge">Kies je vak</span>
+                <h2>Welkom bij 10krijgen!</h2>
+                <p>Selecteer hieronder het vak dat je wilt gaan oefenen voor 2 VWO.</p>
+            </div>
+
+            <div class="subjects-grid">
+                <!-- Aardrijkskunde -->
+                <div class="subject-card ak" onclick="selectSubject('aardrijkskunde')">
+                    <div>
+                        <div class="card-icon">🌍</div>
+                        <h3>Aardrijkskunde</h3>
+                        <div class="subject-subtitle">buiteNLand • Hoofdstuk 1 (§1.1 t/m §1.4)</div>
+                        <div class="subject-desc">
+                            Gebergtevorming, mechanische & chemische verwering, massabewegingen, erosie, V/U-dalen en sedimentatie.
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span>Start Vakoverzicht</span>
+                        <span>➔</span>
+                    </div>
+                </div>
+
+                <!-- Geschiedenis -->
+                <div class="subject-card gs" onclick="selectSubject('geschiedenis')">
+                    <div>
+                        <div class="card-icon">🏛️</div>
+                        <h3>Geschiedenis</h3>
+                        <div class="subject-subtitle">Geschiedenis Werkplaats • Hoofdstuk 1 (§1.1 t/m §1.5)</div>
+                        <div class="subject-desc">
+                            Europese overzeese expansie, Vasco da Gama, Jan Huygen van Linschoten, Bartolomé de las Casas & Trans-Atlantische slavenhandel.
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span>Start Vakoverzicht</span>
+                        <span>➔</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VAK INHOUD -->
+        <div id="subject-content" class="hidden">
+            
+            <nav>
+                <button onclick="switchTab('leerstof')" id="btn-leerstof" class="nav-btn active">📚 Leerstof</button>
+                <button onclick="switchTab('flitskaarten')" id="btn-flitskaarten" class="nav-btn">🃏 Flitskaarten</button>
+                <button onclick="switchTab('foutentrainer')" id="btn-foutentrainer" class="nav-btn">❌ Foutentrainer (<span id="error-count">0</span>)</button>
+                <button onclick="switchTab('oor')" id="btn-oor" class="nav-btn">🔗 OOR-Trainer</button>
+                <button onclick="switchTab('proefwerk')" id="btn-proefwerk" class="nav-btn">📝 Proefwerk</button>
+            </nav>
+
+            <!-- 1. LEERSTOF TAB -->
+            <div id="tab-leerstof">
+                <input type="text" id="live-search" class="search-bar" placeholder="🔍 Zoek direct naar een begrip of term..." onkeyup="filterLeerstof()">
+                
+                <!-- Geschiedenis stof -->
+                <div id="content-geschiedenis" class="hidden">
+                    <div class="section-card">
+                        <div class="section-title gs-title">§1.1 t/m §1.5 Geschiedenis Werkplaats Begrippen</div>
+                        
+                        <div class="qa-item search-target">
+                            <div class="qa-header">
+                                <span class="qa-question">Venetië en Genua</span>
+                                <div class="qa-actions">
+                                    <button class="btn-mini" onclick="speakText('Venetië en Genua: Machtige Italiaanse handelssteden die rijk werden door tussenhandel.')">🔊</button>
+                                    <button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button>
+                                </div>
+                            </div>
+                            <div class="answer-box">Machtige Italiaanse handelssteden met een monopolie op de tussenhandel in oosterse luxegoederen (specerijen, zijde).</div>
+                        </div>
+
+                        <div class="qa-item search-target">
+                            <div class="qa-header">
+                                <span class="qa-question">Ottomaanse Rijk & 1453</span>
+                                <div class="qa-actions">
+                                    <button class="btn-mini" onclick="speakText('Ottomaanse Rijk: Turks moslimrijk dat in 1453 Constantinopel innam.')">🔊</button>
+                                    <button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button>
+                                </div>
+                            </div>
+                            <div class="answer-box">Turks-islamitisch rijk dat in 1453 Constantinopel veroverde en de landroutes naar Azië afsloot voor Europeanen.</div>
+                        </div>
+
+                        <div class="qa-item search-target">
+                            <div class="qa-header">
+                                <span class="qa-question">Songhairijk & Timboektoe</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">West-Afrikaans rijk rijk geworden door de trans-Saharahandel in goud, zout en slaafgemaakten.</div>
+                        </div>
+
+                        <div class="qa-item search-target">
+                            <div class="qa-header">
+                                <span class="qa-question">Kaap de Goede Hoop (1488)</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">Zuidelijkste punt van Afrika, ontdekt door Bartolomeu Dias, waardoor de zeeroute naar Azië openlag.</div>
+                        </div>
+
+                        <div class="qa-item search-target">
+                            <div class="qa-header">
+                                <span class="qa-question">Vasco da Gama (1498)</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">Portugese ontdekkingsreiziger die als eerste via de route om Afrika heen India (Calicut) bereikte.</div>
+                        </div>
+
+                        <div class="qa-item search-target">
+                            <div class="qa-header">
+                                <span class="qa-question">Jan Huygen van Linschoten</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">Nederlander in Portugese dienst die geheime vaarroutes stal en opschreef voor de Nederlandse Republiek.</div>
+                        </div>
+
+                        <div class="qa-item search-target">
+                            <div class="qa-header">
+                                <span class="qa-question">Trans-Atlantische Slavenhandel / Driehoekshandel</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">Handelssysteem tussen Europa (nijverheid), Afrika (slaafgemaakten) en Amerika (plantageproducten als suiker en tabak).</div>
+                        </div>
+
+                        <div class="qa-item search-target">
+                            <div class="qa-header">
+                                <span class="qa-question">Bartolomé de las Casas</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon betekenis</button></div>
+                            </div>
+                            <div class="answer-box">Spaanse priester die fel opkwam voor de rechten van de inheemse volkeren en protesteerde tegen wrede dwangarbeid.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aardrijkskunde stof -->
+                <div id="content-aardrijkskunde" class="hidden">
+                    <div class="section-card">
+                        <div class="section-title ak-title">§1.1 t/m §1.4 buiteNLand Begrippen</div>
+                        
+                        <div class="qa-item search-target">
+                            <div class="qa-header">
+                                <span class="qa-question">Endogene vs. Exogene Krachten</span>
+                                <div class="qa-actions">
+                                    <button class="btn-mini" onclick="speakText('Endogene krachten komen van binnenuit de aarde, exogene krachten van buitenaf.')">🔊</button>
+                                    <button class="btn-mini" onclick="toggleAnswer(this)">Toon antwoord</button>
+                                </div>
+                            </div>
+                            <div class="answer-box">Endogeen = krachten van binnenuit de aarde (platentektoniek, aardbevingen, vulkanisme). Exogeen = krachten van buitenaf (wind, water, ijs, verwering).</div>
+                        </div>
+
+                        <div class="qa-item search-target">
+                            <div class="qa-header">
+                                <span class="qa-question">Mechanische vs. Chemische Verwering</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon antwoord</button></div>
+                            </div>
+                            <div class="answer-box">Mechanisch: gesteente breekt zonder chemische verandering (bijv. vorstverwering). Chemisch: gesteente lost op of verandert van samenstelling door zuren en water.</div>
+                        </div>
+
+                        <div class="qa-item search-target">
+                            <div class="qa-header">
+                                <span class="qa-question">Sedimentatievolgorde van een rivier</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon antwoord</button></div>
+                            </div>
+                            <div class="answer-box">Bij afnemende stroomsnelheid zet een rivier materiaal af van zwaar naar licht: 1. Grind, 2. Zand, 3. Klei.</div>
+                        </div>
+
+                        <div class="qa-item search-target">
+                            <div class="qa-header">
+                                <span class="qa-question">V-dal vs. U-dal</span>
+                                <div class="qa-actions"><button class="btn-mini" onclick="toggleAnswer(this)">Toon antwoord</button></div>
+                            </div>
+                            <div class="answer-box">V-dal ontstaat door uitslijping van een snelle rivier. U-dal ontstaat door de enorme uitslijpende kracht van een langzaam schurende gletsjer.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. FLITSKAARTEN TAB -->
+            <div id="tab-flitskaarten" class="hidden">
+                <div class="flashcard-wrapper">
+                    <div class="perspective-container" onclick="flipCard()">
+                        <div id="flashcard" class="flashcard-3d">
+                            <div class="card-face card-front">
+                                <span class="card-tag">Begrip</span>
+                                <div id="fc-front" class="card-body-text">Laden...</div>
+                                <span id="fc-counter" style="font-size: 0.75rem; color: var(--text-muted); text-align: center;">Kaart 1</span>
+                            </div>
+                            <div class="card-face card-back">
+                                <span class="card-tag" style="color: #a5b4fc;">Betekenis</span>
+                                <div id="fc-back" class="card-body-text" style="font-size: 0.95rem; font-weight: 500;">Laden...</div>
+                                <span style="font-size: 0.75rem; color: #c7d2fe; text-align: center;">Klik om te draaien 🔄</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="controls-row">
+                        <button class="control-btn danger" onclick="markCardError()">❌ Fout (Naar Foutentrainer)</button>
+                        <button class="control-btn primary" onclick="nextCard(1)">✅ Goed (+5 XP)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. FOUTENTRAINER TAB -->
+            <div id="tab-foutentrainer" class="hidden">
+                <div class="section-card">
+                    <div class="section-title gs-title">❌ Spaced-Repetition Foutentrainer</div>
+                    <p style="font-size:0.85rem; color: var(--text-muted); margin-bottom:12px;">Hier staan al je gemarkeerde fouten. Oefen ze tot je ze foutloos beheerst!</p>
+                    <div id="error-list"></div>
+                </div>
+            </div>
+
+            <!-- 4. OOR-TRAINER TAB (Oorzaak - Gebeurtenis - Gevolg) -->
+            <div id="tab-oor" class="hidden">
+                <div class="section-card">
+                    <div class="section-title gs-title">🔗 OOR-Trainer (Oorzaak, Gebeurtenis & Gevolg)</div>
+                    <button class="control-btn" style="background-color: var(--bg-card-hover); margin-bottom: 14px;" onclick="generateOORScenario()">🎲 Genereer Nieuwe Gebeurtenis</button>
+                    
+                    <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 14px; margin-bottom: 16px;">
+                        <span style="font-size: 0.75rem; font-weight: 900; text-transform: uppercase; color: #818cf8;">Gebeurtenis / Fenomeen:</span>
+                        <div id="oor-title" style="font-size: 1.05rem; font-weight: 800; margin-top: 4px;">Klik op de knop om te starten...</div>
+                    </div>
+
+                    <div class="oor-box">
+                        <label class="oor-label">1. Wat was de Oorzaak? (Waarom gebeurde dit?)</label>
+                        <textarea id="oor-cause" rows="2" placeholder="Typ de oorzaak / aanleiding..."></textarea>
+                    </div>
+
+                    <div class="oor-box">
+                        <label class="oor-label">2. Wat hield de Gebeurtenis in? (Wat gebeurde er precies?)</label>
+                        <textarea id="oor-event" rows="2" placeholder="Typ de kern van het verschijnsel of de gebeurtenis..."></textarea>
+                    </div>
+
+                    <div class="oor-box">
+                        <label class="oor-label">3. Wat was het Gevolg? (Wat was het resultaat op de langere termijn?)</label>
+                        <textarea id="oor-effect" rows="2" placeholder="Typ het gevolg of de afloop..."></textarea>
+                    </div>
+
+                    <button class="control-btn primary" style="margin-top: 4px;" onclick="checkOORAnswer()">Controleer Antwoorden (+20 XP)</button>
+                    <div id="oor-result" class="answer-box" style="margin-top: 12px;"></div>
+                </div>
+            </div>
+
+            <!-- 5. PROEFWERK TAB -->
+            <div id="tab-proefwerk" class="hidden">
+                <div class="section-card">
+                    <div class="section-title gs-title">📝 Dynamische Proefwerk Simulator met N-Term</div>
+                    <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                        <label style="font-size: 0.85rem; font-weight: 700;">N-Term (Normering):</label>
+                        <input type="number" id="n-term" value="1.0" step="0.1" min="0.5" max="2.0" style="width: 80px; margin-top: 0;">
+                    </div>
+                    
+                    <div id="pw-quiz-box">
+                        <p id="pw-question" style="font-weight: 800; font-size: 1rem; margin-bottom: 12px;">Vraag...</p>
+                        <div id="pw-options"></div>
+                    </div>
+
+                    <div id="pw-result-box" class="hidden" style="text-align: center; padding: 20px;">
+                        <h3 style="font-size: 1.5rem; font-weight: 900;">Toets Voltooid!</h3>
+                        <div style="font-size: 3rem; font-weight: 900; color: var(--accent-indigo); margin: 10px 0;" id="pw-grade">8.5</div>
+                        <p id="pw-details" style="font-size: 0.9rem; color: var(--text-muted);"></p>
+                        <button class="control-btn primary" style="margin-top: 14px; max-width: 200px;" onclick="startDynamicProefwerk()">Nieuwe Toets Starten</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        /* RANGEN & XP SYSTEM */
+        let xp = parseInt(localStorage.getItem('10k_xp')) || 0;
+        let streak = parseInt(localStorage.getItem('10k_streak')) || 1;
+        let errorCards = JSON.parse(localStorage.getItem('10k_errors')) || [];
+
+        const ranks = ["Rekruut", "Schildknaap", "Verkenner", "Geleerde", "Meester", "Grootmeester", "Legende", "Koning van de 10", "Keizer", "Onverslaanbaar"];
+
+        function updateXP(amount) {
+            xp += amount;
+            localStorage.setItem('10k_xp', xp);
+            document.getElementById('xp-counter').textContent = xp;
+            document.getElementById('streak-counter').textContent = streak;
+            
+            let lvl = Math.floor(xp / 50) + 1;
+            let rankName = ranks[Math.min(lvl - 1, ranks.length - 1)];
+            document.getElementById('level-badge').textContent = `Lvl ${lvl} - ${rankName}`;
+            document.getElementById('error-count').textContent = errorCards.length;
+        }
+
+        let activeSubject = null;
+
+        /* UITGEBREIDE KENNISBASIS (18 ITEMS PER VAK = 36 TOTAAL) */
+        const knowledgeBase = {
+            geschiedenis: [
+                { term: "Venetië & Genua", def: "Machtige Italiaanse handelssteden met een alleenrecht (monopolie) op de oosterse tussenhandel.", keywords: ['venetië', 'genua', 'tussenhandel', 'oosterse', 'monopolie'] },
+                { term: "Ottomaanse Rijk (1453)", def: "Turks moslimrijk dat Constantinopel veroverde en de Europese landroutes naar Azië afsloot.", keywords: ['ottoman', 'constantinopel', '1453', 'landroute', 'zeeroute'] },
+                { term: "Songhairijk", def: "Machtig West-Afrikaans rijk met de stad Timboektoe, rijk door trans-Saharahandel in goud en zout.", keywords: ['songhai', 'timboektoe', 'goud', 'zout', 'sahara'] },
+                { term: "Kaap de Goede Hoop (1488)", def: "Zuidelijkste punt van Afrika, ontdekt door Bartolomeu Dias, wat de open waterroute naar Indië bewees.", keywords: ['dias', 'kaap', 'goede', 'hoop', 'afrika'] },
+                { term: "Vasco da Gama (1498)", def: "Portugese ontdekkingsreiziger die als eerste via de route om Afrika heen India (Calicut) bereikte.", keywords: ['vasco', 'gama', 'india', 'calicut', 'zeeroute'] },
+                { term: "Jan Huygen van Linschoten", def: "Nederlander in Portugese dienst die geheime zeekaarten en vaarroutes stal en openbaar maakte.", keywords: ['linschoten', 'portugese', 'geheim', 'vaarroutes', 'kaarten'] },
+                { term: "Trans-Atlantische Slavenhandel", def: "Driehoekshandel tussen Europa (nijverheid), Afrika (slaafgemaakten) en Amerika (plantageproducten).", keywords: ['driehoekshandel', 'afrika', 'amerika', 'slaafgemaakten', 'plantages'] },
+                { term: "Bartolomé de las Casas", def: "Spaanse priester die fel opkwam voor de mensenrechten van de inheemse indianen.", keywords: ['las casas', 'priester', 'indianen', 'mishandeling', 'rechten'] },
+                { term: "Hernán Cortés", def: "Spaanse conquistador die in 1521 met superieure wapens en ziektes het Aztekenrijk veroverde.", keywords: ['cortés', 'azteken', 'conquistador', 'mexico', 'verovering'] },
+                { term: "Francisco Pizarro", def: "Spaanse veroveraar die in 1532 de incaleider Atahualpa gevangennam en het Incarijk onderwierp.", keywords: ['pizarro', 'inca', 'peru', 'atahualpa', 'verovering'] },
+                { term: "Verdrag van Tordesillas (1494)", def: "Pauselijk verdrag waarbij de onontdekte wereld tussen Spanje en Portugal werd verdeeld.", keywords: ['tordesillas', 'spanje', 'portugal', 'paus', 'verdeling'] },
+                { term: "Encomienda-systeem", def: "Spaanse kroon gaf kolonisten land inclusief de verplichte dwangarbeid van inheemse indianen.", keywords: ['encomienda', 'dwangarbeid', 'kolonisten', 'indianen', 'plantage'] },
+                { term: "Factorij", def: "Een versterkte Europese handelspost aan een vreemde kust voor opslag, ruilhandel en bescherming.", keywords: ['factorij', 'handelspost', 'opslag', 'kust', 'ruilhandel'] },
+                { term: "Handelsmonopolie", def: "Het alleenrecht om in een bepaald product of in een bepaald gebied handel te drijven.", keywords: ['monopolie', 'alleenrecht', 'handel', 'exclusief'] },
+                { term: "Christoffel Columbus (1492)", def: "Italiaanse kapitein in Spaanse dienst die naar het westen voer en onbedoeld Amerika ontdekte.", keywords: ['columbus', '1492', 'amerika', 'westelijke', 'route'] },
+                { term: "Amerigo Vespucci", def: "Italiaanse onderzoeker die als eerste bewees dat Columbus een nieuw continent had gevonden.", keywords: ['vespucci', 'amerigo', 'continent', 'nieuwe', 'wereld'] },
+                { term: "Karveel", def: "Nieuw type wendbaar en zeewaardig Europees schip waarmee lange ontdekkingsreizen mogelijk werden.", keywords: ['karveel', 'schip', 'zeewaardig', 'wendbaar', 'expansie'] },
+                { term: "Privilegie / Ceuta (1415)", def: "De verovering van Ceuta door Portugal wat het startsein vormde voor de Afrikaanse kusterkennen.", keywords: ['ceuta', '1415', 'portugal', 'startsein', 'expansie'] }
+            ],
+            aardrijkskunde: [
+                { term: "Endogene krachten", def: "Gebergtevormende krachten die werken vanuit het binnenste van de aardkorst (platentektoniek).", keywords: ['endogeen', 'binnenste', 'platentektoniek', 'vulkanisme', 'aardbeving'] },
+                { term: "Exogene krachten", def: "Krachten van buitenaf die de aardkorst veranderen (wind, water, ijs, verwering, erosie).", keywords: ['exogeen', 'buitenaf', 'wind', 'water', 'verwering'] },
+                { term: "Mechanische verwering", def: "Verbrokkeling van gesteente zonder dat de chemische samenstelling verandert (bijv. vorst).", keywords: ['mechanisch', 'vorst', 'spleten', 'uitzetten', 'verbrokkelen'] },
+                { term: "Chemische verwering", def: "Oplossen of veranderen van gesteente door de inwerking van zuren, zuurstof en water.", keywords: ['chemisch', 'zuren', 'oplossen', 'water', 'kalksteen'] },
+                { term: "Sedimentatievolgorde", def: "Afzetting van materiaal door een rivier bij afnemende stroomsnelheid: Grind -> Zand -> Klei.", keywords: ['sedimentatie', 'stroomsnelheid', 'grind', 'zand', 'klei'] },
+                { term: "V-dal vs U-dal", def: "V-dal ontstaat door insnijding van snelle rivieren; U-dal door schurende ijsmassa's (gletsjers).", keywords: ['v-dal', 'u-dal', 'rivier', 'gletsjer', 'erosie'] },
+                { term: "Karstlandschap", def: "Landschap ontstaan door chemische oplossing van kalksteen (grotten, sinkholes, dolines).", keywords: ['karst', 'kalksteen', 'grotten', 'oplossen', 'sinkhole'] },
+                { term: "Massabewegingen", def: "Het naar beneden glijden van puin, rotsen of modder langs een helling onder invloed van zwaartekracht.", keywords: ['massabeweging', 'zwaartekracht', 'helling', 'puin', 'glijden'] },
+                { term: "Plooiingsgebergte", def: "Gebergte dat ontstaat wanneer twee continentale aardplaten botsen en de korst plooit.", keywords: ['plooiing', 'botsing', 'aardplaten', 'gebergte', 'alpen'] },
+                { term: "Erosie vs Verwering", def: "Verwering is het afbrokkelen van steen; erosie is het verplaatsen en schuren van dat materiaal.", keywords: ['erosie', 'verwering', 'afbrokkelen', 'verplaatsen', 'schuren'] },
+                { term: "Estuarium", def: "Brede, trechtervormige riviermonding die ontstaat door sterke eb- en vloedwerking.", keywords: ['estuarium', 'trechter', 'riviermonding', 'eb', 'vloed'] },
+                { term: "Delta", def: "Aaneenschakeling van afzettingsland bij een riviermonding waar de zee nauwelijks stroming heeft.", keywords: ['delta', 'riviermonding', 'sedimentatie', 'vertakking'] },
+                { term: "Meanderen", def: "Het natuurlijk kronkelen van een rivier in een vlak landschap door erosie en sedimentatie.", keywords: ['meanderen', 'kronkelen', 'buitenbocht', 'binnenbocht', 'rivier'] },
+                { term: "Glaciaal landschap", def: "Landschap gevormd door de schurende en bedekkende werking van ijs en gletsjers.", keywords: ['glaciaal', 'ijs', 'gletsjer', 'morrene', 'u-dal'] },
+                { term: "Vorstverwering", def: "Vorm van mechanische verwering waarbij bevriezend water in rotsspleten de steen laat barsten.", keywords: ['vorst', 'bevriezen', 'spleten', 'uitzetten', 'druk'] },
+                { term: "Puinhelling", def: "Ophoping van losse brokken gesteente aan de voet van een berg door massabewegingen.", keywords: ['puinhelling', 'berg', 'zwaartekracht', 'vallend', 'gesteente'] },
+                { term: "Convectiestromen", def: "Langzame stromingen van vloeibaar gesteente diep in de aardmantel die aardplaten bewegen.", keywords: ['convectie', 'aardmantel', 'magma', 'platentektoniek', 'stroming'] },
+                { term: "Schildvulkanen", def: "Vulkanen met een flauwe helling ontstaan door dunne, makkelijk uitstromende lava.", keywords: ['schildvulkaan', 'lava', 'vloeibaar', 'flauw', 'uitbarsting'] }
+            ]
+        };
+
+        /* ---------------------------------------------------------
+           OOR-TRAINER DATABASE (16 SPECIFIEKE GEBEURTENISSEN)
+           --------------------------------------------------------- */
+        const oorDatabase = {
+            geschiedenis: [
+                {
+                    event: "De inname van Constantinopel in 1453 door het Ottomaanse Rijk",
+                    cause: "Het Ottomaanse Rijk veroverde de hoofdstad en kreeg de controle over de landroutes naar Azië.",
+                    causeKeywords: ['ottoman', 'constantinopel', 'landroutes', 'veroverd', 'turks'],
+                    eventDesc: "De stad viel in islamitische handen en de traditionele handel in specerijen en zijde werd afgesloten of belast met hoge tolgelden.",
+                    eventKeywords: ['tussenhandel', 'tol', 'afgesloten', 'specerijen', 'duur'],
+                    effect: "Europeanen (Spanje en Portugal) werden gedwongen om zelf nieuwe zeeroutes naar Azië te ontdekken.",
+                    effectKeywords: ['zeeroute', 'spanje', 'portugal', 'zoeken', 'omzeilen']
+                },
+                {
+                    event: "De ontdekking van Kaap de Goede Hoop (1488) door Bartolomeu Dias",
+                    cause: "Portugezen waren op zoek naar een doorvaart rond het Afrikaanse continent om in Azië te komen.",
+                    causeKeywords: ['portugal', 'zoektocht', 'afrika', 'doorvaart'],
+                    eventDesc: "Ontdekkingsreiziger Bartolomeu Dias voer als eerste rond het zuidelijkste puntje van Afrika en bewees dat er een open waterverbinding was.",
+                    eventKeywords: ['dias', 'zuidelijkste', 'punt', 'waterverbinding', 'indische oceaan'],
+                    effect: "De weg lag open voor latere ontdekkingsreizigers (zoals Vasco da Gama) om definitief naar India te varen.",
+                    effectKeywords: ['vasco', 'gama', 'india', 'vrij', 'doorsteken']
+                },
+                {
+                    event: "De reis van Vasco da Gama naar Calicut, India (1498)",
+                    cause: "De succesvolle verkenning van de Afrikaanse kust en de ontdekking van Kaap de Goede Hoop.",
+                    causeKeywords: ['kaap', 'goede', 'hoop', 'dias', 'kust'],
+                    eventDesc: "Vasco da Gama voer voor het eerst via de oostelijke zeeroute om Afrika heen helemaal naar India.",
+                    eventKeywords: ['om', 'afrika', 'india', 'calicut', 'zeeroute'],
+                    effect: "Portugal kreeg direct toegang tot de lucratieve specerijenmarkt zonder islamitische tussenpersonen.",
+                    effectKeywords: ['specerijen', 'markt', 'portugal', 'rijk', 'tussenhandel']
+                },
+                {
+                    event: "De ontdekkingsreis van Christoffel Columbus in 1492",
+                    cause: "Columbus wilde bewijzen dat je door naar het westen te varen ook in Indië (Azië) kon komen.",
+                    causeKeywords: ['westen', 'indie', 'azie', 'kortere', 'route'],
+                    eventDesc: "Hij stak de Atlantische Oceaan over en landde per abuis in Amerika (de Caraïben), denkende dat hij in Azië was.",
+                    eventKeywords: ['atlantische', 'oceaan', 'amerika', 'caraiben', 'vergissing'],
+                    effect: "De 'Nieuwe Wereld' werd ontdekt voor Europeanen, wat leidde tot massale kolonisatie en de naam 'indianen'.",
+                    effectKeywords: ['kolonisatie', 'indianen', 'nieuwe', 'wereld', 'spanje']
+                },
+                {
+                    event: "De verovering van het Aztekenrijk door Hernán Cortés",
+                    cause: "Spaanse conquistadores waren op zoek naar goud, zilver, roem en nieuw land in Amerika.",
+                    causeKeywords: ['goud', 'zilver', 'conquistadores', 'roem', 'spanjaarden'],
+                    eventDesc: "Cortés viel met handlangers en vuurwapens het machtige Aztekenrijk binnen en versloeg keizer Montezuma.",
+                    eventKeywords: ['cortes', 'azteken', 'montezuma', 'vuurwapens', 'verslagen'],
+                    effect: "Het rijk stortte in, de inheemse bevolking werd onderdrukt en Spanje stichtte daar de kolonie Nieuw-Spanje.",
+                    effectKeywords: ['kolonie', 'onderdrukking', 'spanje', 'rijk', 'ingestort']
+                },
+                {
+                    event: "De verovering van het Incarijk door Francisco Pizarro",
+                    cause: "De geruchten over reusachtige goudvoorraden in het Andesgebergte trokken Spaanse avonturiers aan.",
+                    causeKeywords: ['goud', 'andes', 'pizarro', 'geruchten'],
+                    eventDesc: "Pizarro nam de incaleider gevangen en nam met een kleine legermacht het uitgestrekte Incarijk over.",
+                    eventKeywords: ['incaleider', 'gevangen', 'legermacht', 'overgenomen'],
+                    effect: "Enorme hoeveelheden zilver en goud stroomden richting Spanje, terwijl de incabevolking gedwongen in mijnen moest werken.",
+                    effectKeywords: ['zilver', 'mijnen', 'dwangarbeid', 'spanje']
+                },
+                {
+                    event: "De Trans-Atlantische Slavenhandel (Driehoekshandel)",
+                    cause: "Plantages in Amerika hadden enorm veel werkkrachten nodig nadat de inheemse bevolking grotendeels was uitgestorven door ziektes.",
+                    causeKeywords: ['plantages', 'werkkrachten', 'uitgestorven', 'tekort'],
+                    eventDesc: "Europeanen ruilden goederen in Afrika voor slaafgemaakten, verscheepten hen over de oceaan en verkochten hen in Amerika.",
+                    eventKeywords: ['driehoek', 'europa', 'afrika', 'amerika', 'slaafgemaakten'],
+                    effect: "Miljoenen Afrikanen werden ontvoerd, plantageproducten overspoelden Europa, en de Afrikaanse samenlevingen raakten ontwricht.",
+                    effectKeywords: ['miljoenen', 'ontvoerd', 'suiker', 'plantageproducten', 'ontwricht']
+                },
+                {
+                    event: "Het protest van priester Bartolomé de las Casas",
+                    cause: "De gruwelijke mishandeling, uitbuiting en massale sterfte van indianen door Spaanse kolonialisten.",
+                    causeKeywords: ['mishandeling', 'uitbuiting', 'sterfte', 'indianen'],
+                    eventDesc: "Las Casas voerde een levenslang gevecht bij de Spaanse koning om aan te tonen dat indianen mensen waren met rechten.",
+                    eventKeywords: ['priester', 'koning', 'rechten', 'menselijk', 'protest'],
+                    effect: "De koning vaardigde wetten uit ter bescherming van indianen (wat helaas ironisch genoeg leidde tot meer inzet van Afrikaanse slaven).",
+                    effectKeywords: ['wetten', 'bescherming', 'afrikaanse', 'slaven']
+                }
+            ],
+            aardrijkskunde: [
+                {
+                    event: "Mechanische vorstverwering in hoge berggebieden",
+                    cause: "Temperatuurwisselingen rond het vriespunt in bergachtige gebieden met veel neerslag.",
+                    causeKeywords: ['temperatuur', 'vriespunt', 'bergen', 'neerslag', 'water'],
+                    eventDesc: "Water sijpelt in rotsspleten, bevriest en zet daarbij met enorme kracht uit, waardoor de rots openbarst.",
+                    eventKeywords: ['spleten', 'bevriezen', 'uitzetten', 'druk', 'openbarsten'],
+                    effect: "Gesteente verbrokkelt en puin glijdt naar beneden (massabewegingen), wat het landschap versneld erodeert.",
+                    effectKeywords: ['verbrokkelt', 'puin', 'erosie', 'helling']
+                },
+                {
+                    event: "Chemische verwering van kalksteen in natte klimaten",
+                    cause: "De inwerking van water dat door CO2 zuur is geworden op oplosbaar kalkgesteente.",
+                    causeKeywords: ['water', 'zuur', 'co2', 'kalksteen', 'oplosbaar'],
+                    eventDesc: "Het zure water lost de mineralen van het gesteente langzaam chemisch op, waardoor grotten en sinkholes ontstaan.",
+                    eventKeywords: ['oplossen', 'mineralen', 'grotten', 'chemisch'],
+                    effect: "Het landschap verandert (karstlandschap) en ondergrondse holtes kunnen instorten.",
+                    effectKeywords: ['karst', 'landschap', 'instorten', 'holtes']
+                },
+                {
+                    event: "Sedimentatieproces langs de loop van een rivier",
+                    cause: "De stroomsnelheid van een rivier die afneemt naarmate deze de zee of monding nadert.",
+                    causeKeywords: ['stroomsnelheid', 'afnemen', 'monding', 'zee'],
+                    eventDesc: "Zodra de snelheid daalt, verliest de rivier kracht en laat het meegevoerde materiaal vallen in een vaste volgorde.",
+                    eventKeywords: ['verliest', 'kracht', 'materiaal', 'laten', 'vallen'],
+                    effect: "Er ontstaat een vaste sedimentatievolgorde: eerst bezinkt zwaar grind, dan zand en tot slot lichte klei.",
+                    effectKeywords: ['grind', 'zand', 'klei', 'volgorde', 'bezinken']
+                },
+                {
+                    event: "De vorming van een V-dal door een rivier",
+                    cause: "De krachtige neerwaartse erosie van een snel stromende rivier in een hooggebergte.",
+                    causeKeywords: ['neerwaartse', 'erosie', 'snel', 'hooggebergte', 'rivier'],
+                    eventDesc: "De rivier slijpt zich diep in de rotsen uit, terwijl de zwaartekracht ervoor zorgt dat puin van de oevers in de rivier glijdt.",
+                    eventKeywords: ['slijpt', 'diep', 'rotsen', 'zwaartekracht', 'oevers'],
+                    effect: "Er ontstaat een typisch diep dal met een scherpe V-vorm in het landschap.",
+                    effectKeywords: ['diep', 'dal', 'v-vorm', 'landschap']
+                },
+                {
+                    event: "De vorming van een U-dal door een gletsjer",
+                    cause: "De enorme gewicht en schurende kracht van een reusachtige ijsmassa (gletsjer) die door een dal schuift.",
+                    causeKeywords: ['gewicht', 'schurende', 'kracht', 'ijsmassa', 'gletsjer'],
+                    eventDesc: "De dikke ijsrivier schuurt niet alleen de bodem uit, maar snijdt ook agressief in de dalwanden aan weerszijden.",
+                    eventKeywords: ['ijsrivier', 'bodem', 'uitschuren', 'dalwanden'],
+                    effect: "Het oorspronkelijke rivierdal wordt uitgesleten tot een brede vallei met steile wanden en een platte bodem (een U-dal).",
+                    effectKeywords: ['brede', 'vallei', 'steile', 'wanden', 'platte', 'bodem', 'u-dal']
+                },
+                {
+                    event: "Platentektoniek en botsing van continentale platen",
+                    cause: "Convectiestromen in de aardmantel die aardplaten tegen elkaar aan duwen (endogene krachten).",
+                    causeKeywords: ['convectiestromen', 'aardmantel', 'platen', 'botsing', 'endogeen'],
+                    eventDesc: "Twee zware aardplaten botsen met enorme kracht op elkaar, waardoor de aardkorst omhoog wordt geduwd en gevouwen.",
+                    eventKeywords: ['botsen', 'enorme', 'kracht', 'omhoog', 'gevouwen'],
+                    effect: "Er ontstaan gigantische plooiingsgebergten (zoals de Alpen of Himalaya) en er kunnen aardbevingen optreden.",
+                    effectKeywords: ['plooiingsgebergten', 'alpen', 'himalaya', 'aardbevingen']
+                },
+                {
+                    event: "Massabewegingen zoals modderstromen of aardverschuivingen",
+                    cause: "Zwaartekracht in combinatie met een steile helling, hevige regenval of een aardbeving.",
+                    causeKeywords: ['zwaartekracht', 'steile', 'helling', 'regenval', 'aardbeving'],
+                    eventDesc: "Verweerd gesteente en doorweekte grond verliezen hun houvast en storten of glijden plotseling naar beneden.",
+                    eventKeywords: ['verweerd', 'gesteente', 'grond', 'houvast', 'glijden'],
+                    effect: "Huizen, wegen of hele dorpen kunnen worden bedolven en het landschap verandert drastisch.",
+                    effectKeywords: ['bedolven', 'schade', 'landschap', 'verandert']
+                },
+                {
+                    event: "De vorming van een estuarium bij een riviermonding",
+                    cause: "Een getijdeverschil (sterke eb en vloed) bij de monding van een rivier in open zee.",
+                    causeKeywords: ['getijdeverschil', 'eb', 'vloed', 'monding', 'zee'],
+                    eventDesc: "Door de krachtige werking van eb en vloed wordt het afgezette sediment direct door de zee weggespoeld.",
+                    eventKeywords: ['eb', 'vloed', 'sediment', 'weggespoeld'],
+                    effect: "Er ontstaat een brede, trechtervormige riviermonding in plaats van een delta met eilandjes.",
+                    effectKeywords: ['brede', 'trechtervormige', 'riviermonding', 'delta']
+                }
+            ]
+        };
+
+        /* ---------------------------------------------------------
+           OOR-TRAINER ENGINE
+           --------------------------------------------------------- */
+        let activeOOREventData = null;
+
+        function generateOORScenario() {
+            if (!activeSubject) return;
+            const pool = oorDatabase[activeSubject];
+            activeOOREventData = pool[Math.floor(Math.random() * pool.length)];
+
+            document.getElementById('oor-title').textContent = activeOOREventData.event;
+            document.getElementById('oor-cause').value = '';
+            document.getElementById('oor-event').value = '';
+            document.getElementById('oor-effect').value = '';
+            document.getElementById('oor-result').style.display = 'none';
+        }
+
+        function checkOORAnswer() {
+            if (!activeOOREventData) return;
+            const causeInput = document.getElementById('oor-cause').value.toLowerCase();
+            const eventInput = document.getElementById('oor-event').value.toLowerCase();
+            const effectInput = document.getElementById('oor-effect').value.toLowerCase();
+            const res = document.getElementById('oor-result');
+            res.style.display = 'block';
+
+            const causeHits = activeOOREventData.causeKeywords.filter(k => causeInput.includes(k)).length;
+            const eventHits = activeOOREventData.eventKeywords.filter(k => eventInput.includes(k)).length;
+            const effectHits = activeOOREventData.effectKeywords.filter(k => effectInput.includes(k)).length;
+
+            let scoreMsg = "";
+            let xpEarned = 0;
+
+            if (causeHits >= 1 && eventHits >= 1 && effectHits >= 1) {
+                scoreMsg = "<strong>Briljant gedaan! (+20 XP)</strong> Je hebt zowel de oorzaak, gebeurtenis als het gevolg correct benoemd!";
+                xpEarned = 20;
+            } else if (causeHits >= 1 || eventHits >= 1 || effectHits >= 1) {
+                scoreMsg = "<strong>Goede poging! (+10 XP)</strong> Je hebt sommige onderdelen goed, maar vul alle drie de vakken nog wat scherper in.";
+                xpEarned = 10;
+            } else {
+                scoreMsg = "<strong>Nog even oefenen.</strong> Probeer de specifieke vaktermen en gebeurtenissen uit je leerstof duidelijker te omschrijven.";
+            }
+
+            res.innerHTML = `
+                ${scoreMsg}<br><br>
+                <strong>💡 Modelantwoord ter controle:</strong><br>
+                - <em>Oorzaak:</em> ${activeOOREventData.cause}<br>
+                - <em>Gebeurtenis:</em> ${activeOOREventData.eventDesc}<br>
+                - <em>Gevolg:</em> ${activeOOREventData.effect}
+            `;
+            if (xpEarned > 0) updateXP(xpEarned);
+        }
+
+        /* ---------------------------------------------------------
+           DYNAMISCHE PROEFWERK GENERATOR (10 Unieke Vragen uit 18 Pool)
+           --------------------------------------------------------- */
+        let pwQuestions = [];
+        let pwIndex = 0;
+        let pwScore = 0;
+
+        function startDynamicProefwerk() {
+            if (!activeSubject) return;
+            pwIndex = 0;
+            pwScore = 0;
+            pwQuestions = [];
+
+            const pool = knowledgeBase[activeSubject];
+
+            // Schud de hele pool en kies 10 unieke items uit de 18
+            const shuffledPool = [...pool].sort(() => Math.random() - 0.5);
+            const selectedItems = shuffledPool.slice(0, 10);
+
+            selectedItems.forEach(target => {
+                const distractors = pool.filter(item => item.term !== target.term);
+                const shuffledDistractors = distractors.sort(() => Math.random() - 0.5).slice(0, 3);
+
+                const allOptions = [target.def, ...shuffledDistractors.map(d => d.def)].sort(() => Math.random() - 0.5);
+                const correctIndex = allOptions.indexOf(target.def);
+
+                pwQuestions.push({
+                    q: `Wat is de juiste betekenis van het begrip: '${target.term}'?`,
+                    opts: allOptions,
+                    correct: correctIndex
+                });
+            });
+
+            document.getElementById('pw-quiz-box').classList.remove('hidden');
+            document.getElementById('pw-result-box').classList.add('hidden');
+            showPWQuestion();
+        }
+
+        function showPWQuestion() {
+            if (pwIndex >= pwQuestions.length) {
+                finishProefwerk();
+                return;
+            }
+            const q = pwQuestions[pwIndex];
+            document.getElementById('pw-question').textContent = `Vraag ${pwIndex + 1} van ${pwQuestions.length}: ${q.q}`;
+            
+            const opts = document.getElementById('pw-options');
+            opts.innerHTML = '';
+            
+            q.opts.forEach((opt, idx) => {
+                opts.innerHTML += `<button class="opt-btn" onclick="answerPW(${idx})">${opt}</button>`;
+            });
+        }
+
+        function answerPW(idx) {
+            const q = pwQuestions[pwIndex];
+            if (idx === q.correct) pwScore++;
+            pwIndex++;
+            showPWQuestion();
+        }
+
+        function finishProefwerk() {
+            document.getElementById('pw-quiz-box').classList.add('hidden');
+            document.getElementById('pw-result-box').classList.remove('hidden');
+
+            const nTerm = parseFloat(document.getElementById('n-term').value) || 1.0;
+            let grade = ((pwScore / pwQuestions.length) * 9 + nTerm).toFixed(1);
+            grade = Math.min(Math.max(grade, 1.0), 10.0);
+
+            document.getElementById('pw-grade').textContent = grade;
+            document.getElementById('pw-details').textContent = `Je behaalde ${pwScore} van de ${pwQuestions.length} vragen goed.`;
+            updateXP(pwScore * 10);
+        }
+
+        /* OVERIGE BASISFUNCTIES */
+        function filterLeerstof() {
+            const query = document.getElementById('live-search').value.toLowerCase();
+            const items = document.querySelectorAll('.search-target');
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(query) ? 'block' : 'none';
+            });
+        }
+
+        function selectSubject(sub) {
+            activeSubject = sub;
+            document.getElementById('subject-selection').classList.add('hidden');
+            document.getElementById('subject-content').classList.remove('hidden');
+            document.getElementById('change-subject-btn').classList.remove('hidden');
+
+            document.getElementById('content-geschiedenis').classList.toggle('hidden', sub !== 'geschiedenis');
+            document.getElementById('content-aardrijkskunde').classList.toggle('hidden', sub !== 'aardrijkskunde');
+
+            currentCard = 0;
+            loadFlashcardData();
+            generateOORScenario();
+            startDynamicProefwerk();
+            renderErrorCards();
+            switchTab('leerstof');
+        }
+
+        function showSubjectSelection() {
+            document.getElementById('subject-selection').classList.remove('hidden');
+            document.getElementById('subject-content').classList.add('hidden');
+            document.getElementById('change-subject-btn').classList.add('hidden');
+        }
+
+        function switchTab(tab) {
+            ['leerstof', 'flitskaarten', 'foutentrainer', 'oor', 'proefwerk'].forEach(t => {
+                document.getElementById('tab-' + t).classList.add('hidden');
+                document.getElementById('btn-' + t).classList.remove('active');
+            });
+            document.getElementById('tab-' + tab).classList.remove('hidden');
+            document.getElementById('btn-' + tab).classList.add('active');
+        }
+
+        function toggleAnswer(btn) {
+            const box = btn.parentElement.parentElement.nextElementSibling || btn.nextElementSibling;
+            if (box.style.display === 'block') { box.style.display = 'none'; } 
+            else { box.style.display = 'block'; updateXP(2); }
+        }
+
+        function speakText(txt) {
+            if ('speechSynthesis' in window) {
+                const msg = new SpeechSynthesisUtterance(txt);
+                msg.lang = 'nl-NL';
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
+        let currentCard = 0;
+        let isFlipped = false;
+
+        function loadFlashcardData() {
+            if (!activeSubject) return;
+            const cards = knowledgeBase[activeSubject];
+            document.getElementById('fc-front').textContent = cards[currentCard].term;
+            document.getElementById('fc-back').textContent = cards[currentCard].def;
+            document.getElementById('fc-counter').textContent = `Kaart ${currentCard + 1} van ${cards.length}`;
+            document.getElementById('flashcard').classList.remove('flipped');
+            isFlipped = false;
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+        }
+
+        function nextCard(dir) {
+            const cards = knowledgeBase[activeSubject];
+            currentCard = (currentCard + dir + cards.length) % cards.length;
+            if (isFlipped) flipCard();
+            setTimeout(loadFlashcardData, 150);
+            if (dir > 0) updateXP(5);
+        }
+
+        function markCardError() {
+            const card = knowledgeBase[activeSubject][currentCard];
+            if (!errorCards.some(e => e.front === card.term)) {
+                errorCards.push({ front: card.term, back: card.def });
+                localStorage.setItem('10k_errors', JSON.stringify(errorCards));
+                renderErrorCards();
+            }
+            nextCard(1);
+        }
+
+        function renderErrorCards() {
+            const list = document.getElementById('error-list');
+            document.getElementById('error-count').textContent = errorCards.length;
+            if (errorCards.length === 0) {
+                list.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">Geen fouten! Top gedaan! 🎉</p>';
+                return;
+            }
+            list.innerHTML = '';
+            errorCards.forEach((item, idx) => {
+                list.innerHTML += `
+                    <div class="qa-item">
+                        <div class="qa-header">
+                            <span class="qa-question">${item.front}</span>
+                            <button class="btn-mini" onclick="removeError(${idx})">Opgehelderd ✅</button>
+                        </div>
+                        <div style="font-size:0.85rem; color:#cbd5e1; margin-top:4px;">${item.back}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function removeError(idx) {
+            errorCards.splice(idx, 1);
+            localStorage.setItem('10k_errors', JSON.stringify(errorCards));
+            renderErrorCards();
+            updateXP(10);
+        }
+
+        function exportData() {
+            const data = { xp, streak, errorCards };
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = '10krijgen_voortgang.json';
+            a.click();
+        }
+
+        function importData() {
+            const str = prompt("Plak je JSON voortgangsdata hier:");
+            if (str) {
+                try {
+                    const data = JSON.parse(str);
+                    xp = data.xp || 0;
+                    streak = data.streak || 1;
+                    errorCards = data.errorCards || [];
+                    localStorage.setItem('10k_xp', xp);
+                    localStorage.setItem('10k_streak', streak);
+                    localStorage.setItem('10k_errors', JSON.stringify(errorCards));
+                    updateXP(0);
+                    alert("Voortgang ingeladen!");
+                } catch(e) {
+                    alert("Ongeldige data!");
+                }
+            }
+        }
+
+        function resetData() {
+            if (confirm("Weet je zeker dat je alle data wilt wissen?")) {
+                localStorage.clear();
+                xp = 0; streak = 1; errorCards = [];
+                updateXP(0);
+                alert("Gereset!");
+            }
+        }
+
+        updateXP(0);
+    </script>
+</body>
+</html>
