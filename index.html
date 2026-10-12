@@ -793,7 +793,7 @@
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         }
 
-        /* TRAINER ENGINE (MET FOUTENBANK KNOP INTEGRATIE) */
+        /* TRAINER ENGINE (GEFIXTE FOUTENBANK KNOP) */
         let activeTrainerData = null;
         let hasEarnedXPForCurrentScenario = false;
 
@@ -834,9 +834,8 @@
                 ? `<strong>🌟 Uitstekend! ${!hasEarnedXPForCurrentScenario ? '(+20 XP)' : ''}</strong> Je hebt dit proces of deze gebeurtenis perfect doorgrond!`
                 : `<strong>Goed geprobeerd! ${!hasEarnedXPForCurrentScenario ? '(+10 XP)' : ''}</strong><br><strong>Modelantwoord ter controle:</strong><br>- ${activeTrainerData.l1} ${activeTrainerData.p1}<br>- ${activeTrainerData.l2} ${activeTrainerData.p2}<br>- ${activeTrainerData.l3} ${activeTrainerData.p3}`;
 
-            if (!isPerfect) {
-                resultHTML += `<br><button class="btn-mini" style="margin-top:10px; background-color:var(--accent-indigo); color:white;" onclick="addTrainerScenarioToErrors()">➕ Voeg deze casus toe aan Foutentrainer</button>`;
-            }
+            // VOEG ALTIJD DE FOUTENBANK KNOP TOE ZODAT JE EM KUNT OPSLAAN
+            resultHTML += `<br><button class="btn-mini" style="margin-top:12px; background-color:var(--accent-indigo); color:white; padding:8px 14px; font-size:0.85rem;" onclick="addTrainerScenarioToErrors()">➕ Voeg deze casus toe aan Foutentrainer</button>`;
 
             res.innerHTML = resultHTML;
 
@@ -855,9 +854,9 @@
                 errorCards.push({ front: frontText, back: backText, isScenario: true, rawScenario: activeTrainerData });
                 localStorage.setItem('10k_errors', JSON.stringify(errorCards));
                 renderErrorCards();
-                alert(`Casus '${activeTrainerData.title}' succesvol toegevoegd aan de Foutentrainer!`);
+                alert(`Casus '${activeTrainerData.title}' succesvol toegevoegd aan de Foutentrainer! 🎉`);
             } else {
-                alert(`Deze casus staat al in je Foutentrainer.`);
+                alert(`Deze casus staat al in je Foutentrainer!`);
             }
         }
 
@@ -975,7 +974,7 @@
             }
         }
 
-        /* FOUTENTRAINER ENGINE (MET OOR/PROCES CASUSSEN OVERHOOR MODUS) */
+        /* FOUTENTRAINER ENGINE */
         let currentErrorTarget = null;
 
         function startErrorQuiz() {
