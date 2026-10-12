@@ -13,6 +13,7 @@
             --accent-indigo-hover: #4f46e5;
             --accent-amber: #f59e0b;
             --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: #334155;
@@ -103,6 +104,14 @@
         textarea:focus, input:focus { border-color: var(--accent-indigo); }
         .opt-btn { width: 100%; text-align: left; padding: 12px; background-color: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 0.85rem; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; }
         .opt-btn:hover { border-color: var(--accent-indigo); background-color: rgba(99, 102, 241, 0.1); }
+
+        /* NAKIJKSCHERM STYLE */
+        .review-card { background-color: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; margin-bottom: 12px; text-align: left; }
+        .review-card.correct-border { border-left: 4px solid var(--accent-emerald); }
+        .review-card.wrong-border { border-left: 4px solid var(--accent-rose); }
+        .review-status { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; margin-bottom: 6px; }
+        .correct-text { color: var(--accent-emerald); }
+        .wrong-text { color: var(--accent-rose); }
 
         .hidden { display: none !important; }
     </style>
@@ -377,10 +386,10 @@
                 </div>
             </div>
 
-            <!-- 5. PROEFWERK TAB -->
+            <!-- 5. PROEFWERK TAB MET NAKIJKSCHERM -->
             <div id="tab-proefwerk" class="hidden">
                 <div class="section-card">
-                    <div class="section-title gs-title">📝 Dynamische Proefwerk Simulator met N-Term</div>
+                    <div class="section-title gs-title">📝 Dynamische Proefwerk Simulator met N-Term & Nakijkscherm</div>
                     <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
                         <label style="font-size: 0.85rem; font-weight: 700;">N-Term (Normering):</label>
                         <input type="number" id="n-term" value="1.0" step="0.1" min="0.5" max="2.0" style="width: 80px; margin-top: 0;">
@@ -391,11 +400,17 @@
                         <div id="pw-options"></div>
                     </div>
 
-                    <div id="pw-result-box" class="hidden" style="text-align: center; padding: 20px;">
+                    <div id="pw-result-box" class="hidden" style="text-align: center; padding: 10px 0;">
                         <h3 style="font-size: 1.5rem; font-weight: 900;">Toets Voltooid!</h3>
-                        <div style="font-size: 3rem; font-weight: 900; color: var(--accent-indigo); margin: 10px 0;" id="pw-grade">8.5</div>
-                        <p id="pw-details" style="font-size: 0.9rem; color: var(--text-muted);"></p>
-                        <button class="control-btn primary" style="margin-top: 14px; max-width: 200px;" onclick="startDynamicProefwerk()">Nieuwe Toets Starten</button>
+                        <div style="font-size: 3rem; font-weight: 900; color: var(--accent-indigo); margin: 6px 0;" id="pw-grade">8.5</div>
+                        <p id="pw-details" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;"></p>
+                        
+                        <button class="control-btn primary" style="margin-bottom: 24px; max-width: 220px;" onclick="startDynamicProefwerk()">🔄 Nieuwe Toets Starten</button>
+
+                        <div style="border-top: 1px solid var(--border-color); padding-top: 18px;">
+                            <h4 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 14px; text-align: left;">🔍 Nakijkoverzicht van jouw Antwoorden:</h4>
+                            <div id="pw-review-list"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -569,7 +584,7 @@
                 },
                 {
                     event: "Sedimentatieproces langs de loop van een rivier",
-                    cause: "De stroomsnelheid van een rivier die afneemt naarmate deze de zee of monding nadert.",
+                    cause: "De stroomsnelheid van een rivier die afneemt naarmate deze de zee or monding nadert.",
                     causeKeywords: ['stroomsnelheid', 'afnemen', 'monding', 'zee'],
                     eventDesc: "Zodra de snelheid daalt, verliest de rivier kracht en laat het meegevoerde materiaal vallen in een vaste volgorde.",
                     eventKeywords: ['verliest', 'kracht', 'materiaal', 'laten', 'vallen'],
@@ -677,7 +692,7 @@
         }
 
         /* ---------------------------------------------------------
-           DYNAMISCHE PROEFWERK GENERATOR (10 Unieke Vragen uit 18 Pool)
+           DYNAMISCHE PROEFWERK GENERATOR MET NAKIJKSCHERM
            --------------------------------------------------------- */
         let pwQuestions = [];
         let pwIndex = 0;
@@ -691,7 +706,7 @@
 
             const pool = knowledgeBase[activeSubject];
 
-            // Schud de hele pool en kies 10 unieke items uit de 18
+            // Schud de pool en kies 10 unieke items
             const shuffledPool = [...pool].sort(() => Math.random() - 0.5);
             const selectedItems = shuffledPool.slice(0, 10);
 
@@ -703,9 +718,11 @@
                 const correctIndex = allOptions.indexOf(target.def);
 
                 pwQuestions.push({
+                    term: target.term,
                     q: `Wat is de juiste betekenis van het begrip: '${target.term}'?`,
                     opts: allOptions,
-                    correct: correctIndex
+                    correct: correctIndex,
+                    userAnswer: null // Slaat het antwoord van de gebruiker op
                 });
             });
 
@@ -732,6 +749,7 @@
 
         function answerPW(idx) {
             const q = pwQuestions[pwIndex];
+            q.userAnswer = idx; // Sla op wat de gebruiker heeft aangeklikt
             if (idx === q.correct) pwScore++;
             pwIndex++;
             showPWQuestion();
@@ -748,6 +766,45 @@
             document.getElementById('pw-grade').textContent = grade;
             document.getElementById('pw-details').textContent = `Je behaalde ${pwScore} van de ${pwQuestions.length} vragen goed.`;
             updateXP(pwScore * 10);
+
+            // BOUW HET NAKIJKSCHERM OP
+            const reviewList = document.getElementById('pw-review-list');
+            reviewList.innerHTML = '';
+
+            pwQuestions.forEach((q, idx) => {
+                const isCorrect = q.userAnswer === q.correct;
+                const userChoiceText = q.userAnswer !== null ? q.opts[q.userAnswer] : "Geen antwoord gegeven";
+                const correctChoiceText = q.opts[q.correct];
+
+                reviewList.innerHTML += `
+                    <div class="review-card ${isCorrect ? 'correct-border' : 'wrong-border'}">
+                        <div class="review-status ${isCorrect ? 'correct-text' : 'wrong-text'}">
+                            Vraag ${idx + 1}: ${isCorrect ? '✅ Goed Beantwoord' : '❌ Fout Beantwoord'}
+                        </div>
+                        <div style="font-weight:700; font-size:0.9rem; margin-bottom:8px;">${q.q}</div>
+                        <div style="font-size:0.85rem; margin-bottom:4px;">
+                            <strong>Jouw antwoord:</strong> <span class="${isCorrect ? 'correct-text' : 'wrong-text'}">${userChoiceText}</span>
+                        </div>
+                        ${!isCorrect ? `
+                            <div style="font-size:0.85rem; color:#818cf8; margin-bottom:8px;">
+                                <strong>Het juiste antwoord:</strong> <span class="correct-text">${correctChoiceText}</span>
+                            </div>
+                            <button class="btn-mini" onclick="addPWErrorToTrainer('${q.term}', '${correctChoiceText.replace(/'/g, "\\'")}')">➕ Voeg toe aan Foutentrainer</button>
+                        ` : ''}
+                    </div>
+                `;
+            });
+        }
+
+        function addPWErrorToTrainer(term, def) {
+            if (!errorCards.some(e => e.front === term)) {
+                errorCards.push({ front: term, back: def });
+                localStorage.setItem('10k_errors', JSON.stringify(errorCards));
+                renderErrorCards();
+                alert(`'${term}' is toegevoegd aan je Foutentrainer!`);
+            } else {
+                alert(`'${term}' staat al in je Foutentrainer.`);
+            }
         }
 
         /* OVERIGE BASISFUNCTIES */
