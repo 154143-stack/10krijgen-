@@ -288,13 +288,13 @@
             <!-- 3. FOUTENTRAINER TAB -->
             <div id="tab-foutentrainer" class="hidden">
                 <div class="section-card">
-                    <div class="section-title gs-title">❌ Spaced-Repetition Foutentrainer</div>
-                    <p style="font-size:0.85rem; color: var(--text-muted); margin-bottom:14px;">Hier staan al je gemarkeerde fouten. Oefen ze met de quiz-knop tot je ze allemaal beheerst!</p>
+                    <div class="section-title gs-title">❌ Spaced-Repetition Foutentrainer (Begrippen & Procestrainer)</div>
+                    <p style="font-size:0.85rem; color: var(--text-muted); margin-bottom:14px;">Hier staan al je gemarkeerde fouten uit flitskaarten, proefwerken én de OOR/Procestrainer. Oefen ze tot je ze allemaal kent!</p>
                     
                     <button id="start-error-quiz-btn" class="control-btn primary" style="margin-bottom: 16px; width:100%; font-size:1rem;" onclick="startErrorQuiz()">🚀 Start Fouten Oefensessie</button>
 
                     <div id="error-quiz-box" class="hidden" style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--accent-indigo); border-radius:14px; padding:16px; margin-bottom:20px;">
-                        <span style="font-size:0.75rem; font-weight:900; color:#818cf8; text-transform:uppercase;">Fouten Oefenen</span>
+                        <span style="font-size:0.75rem; font-weight:900; color:#818cf8; text-transform:uppercase;" id="error-quiz-tag">Fouten Oefenen</span>
                         <h4 id="error-quiz-question" style="font-size:1.1rem; font-weight:800; margin:8px 0 14px 0;">Vraag...</h4>
                         <div id="error-quiz-options"></div>
                         <div id="error-quiz-feedback" class="answer-box" style="margin-top:10px;"></div>
@@ -391,7 +391,6 @@
         let streak = parseInt(localStorage.getItem('10k_streak')) || 1;
         let errorCards = JSON.parse(localStorage.getItem('10k_errors')) || [];
         
-        // INVENTARIS & DESIGN DATABASE
         let ownedThemes = JSON.parse(localStorage.getItem('10k_owned_themes')) || [''];
         let activeTheme = localStorage.getItem('10k_active_theme') || '';
 
@@ -643,7 +642,7 @@
             ]
         };
 
-        /* UITGEBREIDE TRAINER DATABASES (VEEL MEER CASUSSEN) */
+        /* TRAINER DATABASES */
         const trainerDatabases = {
             geschiedenis: [
                 {
@@ -655,7 +654,7 @@
                 {
                     title: "De reis van Vasco da Gama (1498)",
                     l1: "1. Wat was de Oorzaak?", p1: "De wens om de dure tussenhandel via Arabische handelaren te omzeilen.", k1: ['tussenhandel', 'omzeilen', 'dure'],
-                    l2: "2. Wat hield de Gebeurtenis in?", p2: "Vasco da Gama vaart als eerste Portugees om Afrika heen naar India.", k1: ['afrika', 'india', 'gama'],
+                    l2: "2. Wat hield de Gebeurtenis in?", p2: "Vasco da Gama vaart als eerste Portugees om Afrika heen naar India.", k2: ['afrika', 'india', 'gama'],
                     l3: "3. Wat was het Gevolg?", p3: "Portugal stichtte factorijen en kreeg een lucratief handelsmonopolie op specerijen.", k3: ['monopolie', 'factorij', 'specerijen']
                 },
                 {
@@ -794,7 +793,7 @@
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         }
 
-        /* TRAINER ENGINE */
+        /* TRAINER ENGINE (MET FOUTENBANK KNOP INTEGRATIE) */
         let activeTrainerData = null;
         let hasEarnedXPForCurrentScenario = false;
 
@@ -828,19 +827,37 @@
             const h2 = activeTrainerData.k2.filter(k => a2.includes(k)).length;
             const h3 = activeTrainerData.k3.filter(k => a3.includes(k)).length;
 
-            let earnedThisTurn = 0;
+            let isPerfect = (h1 >= 1 && h2 >= 1 && h3 >= 1);
+            let earnedThisTurn = isPerfect ? 20 : 10;
 
-            if (h1 >= 1 && h2 >= 1 && h3 >= 1) {
-                res.innerHTML = `<strong>🌟 Uitstekend! ${!hasEarnedXPForCurrentScenario ? '(+20 XP)' : ''}</strong> Je hebt dit proces of deze gebeurtenis perfect doorgrond!`;
-                earnedThisTurn = 20;
-            } else {
-                res.innerHTML = `<strong>Goed geprobeerd! ${!hasEarnedXPForCurrentScenario ? '(+10 XP)' : ''}</strong><br><strong>Modelantwoord ter controle:</strong><br>- ${activeTrainerData.l1} ${activeTrainerData.p1}<br>- ${activeTrainerData.l2} ${activeTrainerData.p2}<br>- ${activeTrainerData.l3} ${activeTrainerData.p3}`;
-                earnedThisTurn = 10;
+            let resultHTML = isPerfect 
+                ? `<strong>🌟 Uitstekend! ${!hasEarnedXPForCurrentScenario ? '(+20 XP)' : ''}</strong> Je hebt dit proces of deze gebeurtenis perfect doorgrond!`
+                : `<strong>Goed geprobeerd! ${!hasEarnedXPForCurrentScenario ? '(+10 XP)' : ''}</strong><br><strong>Modelantwoord ter controle:</strong><br>- ${activeTrainerData.l1} ${activeTrainerData.p1}<br>- ${activeTrainerData.l2} ${activeTrainerData.p2}<br>- ${activeTrainerData.l3} ${activeTrainerData.p3}`;
+
+            if (!isPerfect) {
+                resultHTML += `<br><button class="btn-mini" style="margin-top:10px; background-color:var(--accent-indigo); color:white;" onclick="addTrainerScenarioToErrors()">➕ Voeg deze casus toe aan Foutentrainer</button>`;
             }
+
+            res.innerHTML = resultHTML;
 
             if (!hasEarnedXPForCurrentScenario) {
                 updateXP(earnedThisTurn);
                 hasEarnedXPForCurrentScenario = true;
+            }
+        }
+
+        function addTrainerScenarioToErrors() {
+            if (!activeTrainerData) return;
+            const frontText = `[CASUS] ${activeTrainerData.title}`;
+            const backText = `1) ${activeTrainerData.p1} | 2) ${activeTrainerData.p2} | 3) ${activeTrainerData.p3}`;
+
+            if (!errorCards.some(e => e.front === frontText)) {
+                errorCards.push({ front: frontText, back: backText, isScenario: true, rawScenario: activeTrainerData });
+                localStorage.setItem('10k_errors', JSON.stringify(errorCards));
+                renderErrorCards();
+                alert(`Casus '${activeTrainerData.title}' succesvol toegevoegd aan de Foutentrainer!`);
+            } else {
+                alert(`Deze casus staat al in je Foutentrainer.`);
             }
         }
 
@@ -958,40 +975,73 @@
             }
         }
 
-        /* FOUTENTRAINER */
+        /* FOUTENTRAINER ENGINE (MET OOR/PROCES CASUSSEN OVERHOOR MODUS) */
         let currentErrorTarget = null;
+
         function startErrorQuiz() {
             if (errorCards.length === 0) {
-                alert("Je hebt 0 fouten! Top gedaan! 🎉");
+                alert("Je hebt 0 fouten in je foutenbank! Top gedaan! 🎉");
                 return;
             }
             document.getElementById('error-quiz-box').classList.remove('hidden');
             document.getElementById('error-quiz-feedback').style.display = 'none';
 
             currentErrorTarget = errorCards[Math.floor(Math.random() * errorCards.length)];
-            document.getElementById('error-quiz-question').textContent = `Wat is de betekenis van: '${currentErrorTarget.front}'?`;
 
-            const pool = activeSubject ? knowledgeBase[activeSubject] : [...knowledgeBase.aardrijkskunde, ...knowledgeBase.geschiedenis];
-            const distractors = pool.filter(item => item.term !== currentErrorTarget.front).sort(() => Math.random() - 0.5).slice(0, 3);
-            const allOpts = [currentErrorTarget.back, ...distractors.map(d => d.def)].sort(() => Math.random() - 0.5);
+            if (currentErrorTarget.isScenario) {
+                // OVERHOOR CASUS MODUS
+                document.getElementById('error-quiz-tag').textContent = '❌ Casus / Procestrainer Fout Overhoren';
+                document.getElementById('error-quiz-question').textContent = `Casus: '${currentErrorTarget.rawScenario.title}'. Wat is de juiste combinatie van Gebeurtenis (Stap 2) & Gevolg (Stap 3)?`;
 
-            const optsBox = document.getElementById('error-quiz-options');
-            optsBox.innerHTML = '';
-            allOpts.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'opt-btn';
-                btn.textContent = opt;
-                btn.onclick = () => checkErrorQuizAnswer(opt === currentErrorTarget.back);
-                optsBox.appendChild(btn);
-            });
+                const pool = trainerDatabases[activeSubject || 'aardrijkskunde'];
+                const distractors = pool.filter(item => item.title !== currentErrorTarget.rawScenario.title).sort(() => Math.random() - 0.5).slice(0, 3);
+                
+                const correctOpt = `2) ${currentErrorTarget.rawScenario.p2} ➔ 3) ${currentErrorTarget.rawScenario.p3}`;
+                const allOpts = [correctOpt];
+
+                distractors.forEach(d => {
+                    allOpts.push(`2) ${d.p2} ➔ 3) ${d.p3}`);
+                });
+
+                allOpts.sort(() => Math.random() - 0.5);
+
+                const optsBox = document.getElementById('error-quiz-options');
+                optsBox.innerHTML = '';
+                allOpts.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'opt-btn';
+                    btn.textContent = opt;
+                    btn.onclick = () => checkErrorQuizAnswer(opt === correctOpt);
+                    optsBox.appendChild(btn);
+                });
+
+            } else {
+                // STANDAARD BEGRIP MODUS
+                document.getElementById('error-quiz-tag').textContent = '❌ Begrip Fout Overhoren';
+                document.getElementById('error-quiz-question').textContent = `Wat is de betekenis van: '${currentErrorTarget.front}'?`;
+
+                const pool = activeSubject ? knowledgeBase[activeSubject] : [...knowledgeBase.aardrijkskunde, ...knowledgeBase.geschiedenis];
+                const distractors = pool.filter(item => item.term !== currentErrorTarget.front).sort(() => Math.random() - 0.5).slice(0, 3);
+                const allOpts = [currentErrorTarget.back, ...distractors.map(d => d.def)].sort(() => Math.random() - 0.5);
+
+                const optsBox = document.getElementById('error-quiz-options');
+                optsBox.innerHTML = '';
+                allOpts.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'opt-btn';
+                    btn.textContent = opt;
+                    btn.onclick = () => checkErrorQuizAnswer(opt === currentErrorTarget.back);
+                    optsBox.appendChild(btn);
+                });
+            }
         }
 
         function checkErrorQuizAnswer(isCorrect) {
             const fb = document.getElementById('error-quiz-feedback');
             fb.style.display = 'block';
             if (isCorrect) {
-                fb.innerHTML = `<span class="correct-text"><strong>✅ Goed! (+10 XP)</strong> Begrip verwijderd uit je foutenlijst!</span>`;
-                updateXP(10);
+                fb.innerHTML = `<span class="correct-text"><strong>✅ Goed! (+15 XP)</strong> Item succesvol opgehelderd en verwijderd uit je foutenlijst!</span>`;
+                updateXP(15);
                 errorCards = errorCards.filter(e => e.front !== currentErrorTarget.front);
                 localStorage.setItem('10k_errors', JSON.stringify(errorCards));
                 renderErrorCards();
