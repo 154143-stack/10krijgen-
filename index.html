@@ -515,7 +515,7 @@
                 { term: "verwering", def: "het verbrokkelen van gesteente" },
                 { term: "vorstverwering", def: "verwering waarbij gesteente breekt doordat water in de spleten bevriest" },
                 { term: "bovenloop", def: "het begin van de rivier, oftewel het bovenste deel dat in de bergen stroomt" },
-                { term: "erosie", def: "de uitslijpende werking van stromend water, wind of ijs" },
+                { term: "erosie", def: "de uitslijpende werking van stromend water, wind en ijs" },
                 { term: "klei", def: "microscopisch kleine korreltjes die ontstaan als gevolg van verwering" },
                 { term: "massabeweging", def: "het langs een helling naar beneden bewegen van gesteente onder invloed van zwaartekracht" },
                 { term: "puinhelling", def: "helling die bestaat uit verbrokkeld gesteente" },
@@ -582,7 +582,7 @@
             ]
         };
 
-        /* TRAINER DATABASES (OOR voor GS, PROCES voor AK) */
+        /* TRAINER DATABASES */
         const trainerDatabases = {
             geschiedenis: [
                 {
@@ -615,7 +615,6 @@
             document.getElementById('summary-content-container').innerHTML = summariesData[sub];
             document.getElementById('summary-main-title').textContent = sub === 'aardrijkskunde' ? '🎧 Luister-Samenvatting (AK Hoofdstuk 1)' : '🎧 Luister-Samenvatting (GS Hoofdstuk 1)';
 
-            // DYNAMISCHE TRAINER CONFIGURATIE (KRITIEKE FIX)
             if (sub === 'aardrijkskunde') {
                 document.getElementById('trainer-tab-title').textContent = '🏞️ Proces-Trainer';
                 document.getElementById('trainer-card-title').textContent = '🏞️ Landschap- & Procestrainer (AK)';
@@ -685,8 +684,9 @@
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         }
 
-        /* TRAINER ENGINE */
+        /* TRAINER ENGINE (MET GLITCH FIX: HAS EARNED XP VLAG) */
         let activeTrainerData = null;
+        let hasEarnedXPForCurrentScenario = false;
 
         function generateTrainerScenario() {
             if (!activeSubject) return;
@@ -698,6 +698,9 @@
             document.getElementById('t-ans-2').value = '';
             document.getElementById('t-ans-3').value = '';
             document.getElementById('trainer-result').style.display = 'none';
+
+            // Reset vlag voor nieuwe casus
+            hasEarnedXPForCurrentScenario = false;
         }
 
         function checkTrainerAnswer() {
@@ -712,12 +715,20 @@
             const h2 = activeTrainerData.k2.filter(k => a2.includes(k)).length;
             const h3 = activeTrainerData.k3.filter(k => a3.includes(k)).length;
 
+            let earnedThisTurn = 0;
+
             if (h1 >= 1 && h2 >= 1 && h3 >= 1) {
-                res.innerHTML = `<strong>🌟 Uitstekend! (+20 XP)</strong> Je hebt dit proces of deze gebeurtenis perfect doorgrond!`;
-                updateXP(20);
+                res.innerHTML = `<strong>🌟 Uitstekend! ${!hasEarnedXPForCurrentScenario ? '(+20 XP)' : ''}</strong> Je hebt dit proces of deze gebeurtenis perfect doorgrond!`;
+                earnedThisTurn = 20;
             } else {
-                res.innerHTML = `<strong>Goed geprobeerd! (+10 XP)</strong><br><strong>Modelantwoord ter controle:</strong><br>- ${activeTrainerData.l1} ${activeTrainerData.p1}<br>- ${activeTrainerData.l2} ${activeTrainerData.p2}<br>- ${activeTrainerData.l3} ${activeTrainerData.p3}`;
-                updateXP(10);
+                res.innerHTML = `<strong>Goed geprobeerd! ${!hasEarnedXPForCurrentScenario ? '(+10 XP)' : ''}</strong><br><strong>Modelantwoord ter controle:</strong><br>- ${activeTrainerData.l1} ${activeTrainerData.p1}<br>- ${activeTrainerData.l2} ${activeTrainerData.p2}<br>- ${activeTrainerData.l3} ${activeTrainerData.p3}`;
+                earnedThisTurn = 10;
+            }
+
+            // XP slechts EENMAAL toekennen per casus (GLITCH FIX)
+            if (!hasEarnedXPForCurrentScenario) {
+                updateXP(earnedThisTurn);
+                hasEarnedXPForCurrentScenario = true;
             }
         }
 
